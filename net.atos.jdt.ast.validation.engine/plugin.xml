@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="ASTValidationRules" name="ASTValidationRules" schema="schema/ASTValidationRules.exsd"/>
+   <extension
+         id="ASTValidableBuilder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            callOnEmptyDelta="false"
+            hasNature="false"
+            isConfigurable="true"
+            supportsConfigurations="true">
+         <run
+               class="net.atos.jdt.ast.validation.engine.project.ValidationProjectBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="net.atos.jdt.ast.validation.engine.diagnostic"
+         name="AST Validation Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage"
+            class="net.atos.jdt.ast.validation.engine.internal.extpt.ui.RulesExtensionPointPreferencePage"
+            id="net.atos.jdt.ast.validation.engine.rulesPage"
+            name="AST Validation">
+      </page>
+   </extension>
+
+</plugin>
