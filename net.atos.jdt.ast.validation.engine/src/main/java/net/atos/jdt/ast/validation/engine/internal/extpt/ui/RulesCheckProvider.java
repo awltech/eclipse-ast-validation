@@ -40,6 +40,8 @@ public class RulesCheckProvider implements ICheckStateProvider {
 	public boolean isChecked(Object element) {
 		if (element instanceof ASTRuleDescriptor) {
 			ASTRuleDescriptor descriptor = (ASTRuleDescriptor) element;
+			if (descriptor.isMandatory())
+				return true;
 			if (states.containsKey(descriptor))
 				return states.get(descriptor);
 			return ASTRulesPreferences.isEnabled(descriptor);
@@ -56,6 +58,10 @@ public class RulesCheckProvider implements ICheckStateProvider {
 	 */
 	@Override
 	public boolean isGrayed(Object element) {
+		if (element instanceof ASTRuleDescriptor) {
+			ASTRuleDescriptor descriptor = (ASTRuleDescriptor) element;
+			return descriptor.isMandatory();
+		}
 		return false;
 	}
 

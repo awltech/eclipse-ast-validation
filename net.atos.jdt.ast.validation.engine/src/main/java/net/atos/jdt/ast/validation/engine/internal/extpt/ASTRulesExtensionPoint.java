@@ -98,10 +98,11 @@ public class ASTRulesExtensionPoint implements IASTRulesDataSource {
 					for (final IConfigurationElement contextElement : configurationElement
 							.getChildren(ASTRulesExtensionPoint.RULE)) {
 						try {
-							String description = contextElement.getAttribute(DESCRIPTION);
+							final String description = contextElement.getAttribute(DESCRIPTION);
+							final boolean mandatory = Boolean.valueOf(contextElement.getAttribute("mandatory"));
 							final AbstractASTRule rule = (AbstractASTRule) contextElement
 									.createExecutableExtension(ASTRulesExtensionPoint.IMPLEMENTATION);
-							repository.registerRule(new ASTRuleDescriptor(description, rule));
+							repository.registerRule(new ASTRuleDescriptor(description, rule, mandatory));
 						} catch (final Exception e) {
 							Activator
 									.getDefault()

@@ -33,17 +33,24 @@ public class ASTRuleDescriptor {
 	private ASTRulesRepository repository;
 
 	/**
+	 * True is the rule cannot be disabled/bypassed. false otherwise
+	 */
+	private boolean mandatory;
+
+	/**
 	 * Create Rule Descriptor
 	 * 
 	 * @param id
 	 * @param description
 	 * @param rule
+	 * @param mandatory
 	 */
-	public ASTRuleDescriptor(String description, AbstractASTRule rule) {
+	public ASTRuleDescriptor(String description, AbstractASTRule rule, boolean mandatory) {
 		this.id = UUID.randomUUID().toString();
 		this.description = description != null ? description : "";
 		this.rule = rule;
 		this.rule.setRuleDescriptor(this);
+		this.mandatory = mandatory;
 	}
 
 	/**
@@ -93,6 +100,14 @@ public class ASTRuleDescriptor {
 		if (!(obj instanceof ASTRuleDescriptor))
 			return false;
 		return this.id.equals(((ASTRuleDescriptor) obj).id);
+	}
+	
+	/**
+	 * Returns whether this rule is a rule that can be disabled.
+	 * @return
+	 */
+	public boolean isMandatory() {
+		return mandatory;
 	}
 
 }

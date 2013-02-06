@@ -86,7 +86,8 @@ public class ASTRulesRepository {
 	public Set<ASTRuleDescriptor> getRules(final ICompilationUnit compilationUnit) {
 		final Set<ASTRuleDescriptor> rules = new HashSet<ASTRuleDescriptor>();
 		for (final ASTRuleDescriptor rule : this.rules) {
-			if (ASTRulesPreferences.isEnabled(rule) && this.context.validate(compilationUnit)) {
+			boolean ruleEnabled = rule.isMandatory() || ASTRulesPreferences.isEnabled(rule); 
+			if (ruleEnabled && this.context.validate(compilationUnit)) {
 				rules.add(rule);
 			}
 		}

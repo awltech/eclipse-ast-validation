@@ -54,6 +54,9 @@
                <documentation>
                   
                </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="implementation" type="string" use="required">
@@ -64,6 +67,13 @@
                <appinfo>
                   <meta.attribute kind="java" basedOn="net.atos.jdt.ast.validation.engine.rules.AbstractASTRule:"/>
                </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="mandatory" type="boolean">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

@@ -32,13 +32,24 @@ public class RulesCheckListener implements ICheckStateListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ICheckStateListener#checkStateChanged(org.eclipse.jface.viewers.CheckStateChangedEvent)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ICheckStateListener#checkStateChanged(org.eclipse
+	 * .jface.viewers.CheckStateChangedEvent)
 	 */
 	@Override
 	public void checkStateChanged(CheckStateChangedEvent event) {
 		Object element = event.getElement();
 		if (element instanceof ASTRuleDescriptor) {
 			ASTRuleDescriptor descriptor = (ASTRuleDescriptor) element;
+
+			// If element is mandatory, it should always remain checked !
+			if (descriptor.isMandatory()) {
+				event.getCheckable().setChecked(event.getElement(), true);
+				return;
+			}
+
+			// Now, if not mandatory, we save the state.
 			if (states.containsKey(descriptor))
 				states.remove(descriptor);
 			states.put(descriptor, !event.getChecked());
