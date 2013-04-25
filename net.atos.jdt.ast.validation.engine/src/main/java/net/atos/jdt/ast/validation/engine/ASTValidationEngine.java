@@ -134,9 +134,13 @@ public class ASTValidationEngine {
 					Activator
 							.getDefault()
 							.getLog()
-							.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-									"An exception was caught while executing rule <" + ruleDescriptor.getId()
-											+ "> on <" + compilationUnit.getElementName() + ">", e));
+							.log(new Status(
+									IStatus.ERROR,
+									Activator.PLUGIN_ID,
+									"An exception was caught while executing rule <" + ruleDescriptor.getRule() != null ? ruleDescriptor
+											.getRule().getClass().getName()
+											: ruleDescriptor.getId() + "> on <" + compilationUnit.getElementName()
+													+ ">", e));
 					e.printStackTrace();
 				}
 			}
