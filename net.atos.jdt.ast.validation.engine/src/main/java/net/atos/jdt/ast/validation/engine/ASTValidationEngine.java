@@ -111,9 +111,12 @@ public class ASTValidationEngine {
 	 */
 	private void execute(final ICompilationUnit compilationUnit, final IProgressMonitor monitor) throws CoreException {
 
-		if (compilationUnit == null || !compilationUnit.exists())
+		// Bypass the validation if not compilation does not exist (can happen
+		// when build is triggered by removal)
+		if (compilationUnit == null || !compilationUnit.exists()) {
 			return;
-		
+		}
+
 		final List<ASTRulesRepository> repositories = this.dataSource.getRepositories(this.validRepositories);
 		// At first remove the previous markers
 		final IResource resource = compilationUnit.getResource();
