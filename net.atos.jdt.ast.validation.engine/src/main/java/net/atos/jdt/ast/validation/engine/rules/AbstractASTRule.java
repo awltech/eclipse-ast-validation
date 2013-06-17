@@ -48,7 +48,10 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
  */
 public abstract class AbstractASTRule extends ASTVisitor {
 
-	private static final String RULE_ID_KEY = Activator.PLUGIN_ID + ".ruleId";
+	/**
+	 * Key used for identifing the rule that raised the marker
+	 */
+	public static final String RULE_ID_KEY = Activator.PLUGIN_ID + ".ruleId";
 
 	/**
 	 * Java Compilation Unit processed
