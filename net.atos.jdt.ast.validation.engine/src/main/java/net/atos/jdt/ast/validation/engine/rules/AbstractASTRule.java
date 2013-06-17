@@ -48,6 +48,8 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
  */
 public abstract class AbstractASTRule extends ASTVisitor {
 
+	private static final String RULE_ID_KEY = Activator.PLUGIN_ID + ".ruleId";
+
 	/**
 	 * Java Compilation Unit processed
 	 */
@@ -150,6 +152,7 @@ public abstract class AbstractASTRule extends ASTVisitor {
 			createdMarker.setAttribute(IMarker.LINE_NUMBER, this.getLineNumber(node));
 			createdMarker.setAttribute(IMarker.CHAR_START, node.getStartPosition());
 			createdMarker.setAttribute(IMarker.CHAR_END, node.getStartPosition() + node.getLength());
+			createdMarker.setAttribute(AbstractASTRule.RULE_ID_KEY, this.getClass().getName());
 		} catch (final CoreException e) {
 			Activator.logException(e);
 		}
