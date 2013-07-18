@@ -32,6 +32,36 @@ import net.atos.jdt.ast.validation.engine.internal.Activator;
 public class ASTRulesPreferences {
 
 	/**
+	 * Key for participant enablement/disablement
+	 */
+	private static final String PARTICIPANT_DISABLED = "participant.disabled";
+
+	/**
+	 * Enablement of Validation Participant
+	 */
+	public static void enableValidationParticipant() {
+		String key = ASTRulesPreferences.getParticipantKey();
+		Activator.getDefault().getPreferenceStore().setValue(key, false);
+	}
+
+	/**
+	 * Enablement of Validation Participant
+	 */
+	public static void disableValidationParticipant() {
+		String key = ASTRulesPreferences.getParticipantKey();
+		Activator.getDefault().getPreferenceStore().setValue(key, true);
+	}
+
+	/**
+	 * @return true if the Compilation Unit participant for validation is
+	 *         enabled.
+	 */
+	public static boolean isValidationParticipantEnabled() {
+		String key = ASTRulesPreferences.getParticipantKey();
+		return !Activator.getDefault().getPreferenceStore().getBoolean(key);
+	}
+
+	/**
 	 * Enable rule in preferences
 	 */
 	public static void enable(ASTRuleDescriptor descriptor) {
@@ -49,7 +79,7 @@ public class ASTRulesPreferences {
 	 * enable/disable rule in preferences
 	 */
 	public static void setEnabled(ASTRuleDescriptor descriptor, boolean value) {
-		String key = ASTRulesPreferences.buildKey(descriptor);
+		String key = ASTRulesPreferences.getRuleKeyFor(descriptor);
 		Activator.getDefault().getPreferenceStore().setValue(key, value);
 	}
 
@@ -57,7 +87,7 @@ public class ASTRulesPreferences {
 	 * Checks rule's enablement in preferences
 	 */
 	public static boolean isEnabled(ASTRuleDescriptor descriptor) {
-		String key = ASTRulesPreferences.buildKey(descriptor);
+		String key = ASTRulesPreferences.getRuleKeyFor(descriptor);
 		return !Activator.getDefault().getPreferenceStore().getBoolean(key);
 	}
 
@@ -67,8 +97,18 @@ public class ASTRulesPreferences {
 	 * @param descriptor
 	 * @return
 	 */
-	private static String buildKey(ASTRuleDescriptor descriptor) {
+	private static String getRuleKeyFor(ASTRuleDescriptor descriptor) {
 		return "rule.disabled." + descriptor.getRule().getClass().getName();
+	}
+
+	/**
+	 * Returns the key for the current rule.
+	 * 
+	 * @param descriptor
+	 * @return
+	 */
+	private static String getParticipantKey() {
+		return PARTICIPANT_DISABLED;
 	}
 
 }

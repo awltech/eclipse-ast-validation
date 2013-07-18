@@ -21,12 +21,15 @@
  */
 package net.atos.jdt.ast.validation.engine.rules;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.atos.jdt.ast.validation.engine.ASTRuleDescriptor;
+import net.atos.jdt.ast.validation.engine.ASTValidationProblem;
 import net.atos.jdt.ast.validation.engine.internal.Activator;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -69,6 +72,11 @@ public abstract class AbstractASTRule extends ASTVisitor {
 	private ASTRuleDescriptor ruleDescriptor;
 
 	/**
+	 * Problems raised during visit.
+	 */
+	private List<ASTValidationProblem> problems = new ArrayList<ASTValidationProblem>();
+
+	/**
 	 * Sets the rule repository. should not be invoked by clients
 	 * 
 	 * @param ruleRepository
@@ -85,6 +93,7 @@ public abstract class AbstractASTRule extends ASTVisitor {
 	 */
 	@Override
 	public final boolean visit(final CompilationUnit node) {
+		this.problems.clear();
 		this.domCompilationUnit = node;
 		final IJavaElement javaElement = node.getJavaElement();
 		if (javaElement instanceof ICompilationUnit) {
@@ -111,7 +120,7 @@ public abstract class AbstractASTRule extends ASTVisitor {
 	 * @param message
 	 */
 	protected void addErrorMarker(final ASTNode node, final String message) {
-		this.addMarker(node, message, IMarker.SEVERITY_ERROR);
+		this.addMarker(node, message, false, true);
 	}
 
 	/**
@@ -121,7 +130,7 @@ public abstract class AbstractASTRule extends ASTVisitor {
 	 * @param message
 	 */
 	protected void addWarningMarker(final ASTNode node, final String message) {
-		this.addMarker(node, message, IMarker.SEVERITY_WARNING);
+		this.addMarker(node, message, true, false);
 	}
 
 	/**
@@ -131,34 +140,42 @@ public abstract class AbstractASTRule extends ASTVisitor {
 	 * @param message
 	 */
 	protected void addInfoMarker(final ASTNode node, final String message) {
-		this.addMarker(node, message, IMarker.SEVERITY_INFO);
+		this.addMarker(node, message, false, false);
 	}
 
 	/**
 	 * Creates an marker for the AST node provided, with message and severity
 	 * 
+	 * @deprecated use addMarker(ASTNode, String, boolean, boolean)
 	 * @param node
 	 * @param message
 	 * @param severity
 	 *            (from IMarker.SEVERITY_xxx)
+	 * 
 	 */
+	@Deprecated
 	protected void addMarker(final ASTNode node, final String message, final int severity) {
+		boolean isWarning = severity == IMarker.SEVERITY_WARNING;
+		boolean isError = severity == IMarker.SEVERITY_ERROR;
+		this.addMarker(node, message, isWarning, isError);
+	}
+
+	/**
+	 * Creates and stores a Problem in the internal list of problems
+	 * 
+	 * @param node
+	 * @param message
+	 * @param isWarning
+	 * @param isError
+	 */
+	protected void addMarker(final ASTNode node, final String message, final boolean isWarning, final boolean isError) {
 		final IResource resource = this.compilationUnit.getResource();
-		try {
-			final IMarker createdMarker = resource.createMarker(this.ruleDescriptor.getRepository().getMarkerId());
-			createdMarker.setAttribute(IMarker.LINE_NUMBER, this.getLineNumber(node));
-			createdMarker.setAttribute(IMarker.LOCATION, "line " + this.getLineNumber(node));
-			createdMarker.setAttribute(IMarker.MESSAGE, message);
-			createdMarker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
-			createdMarker.setAttribute(IMarker.SEVERITY, severity);
-			createdMarker.setAttribute(IMarker.TRANSIENT, false);
-			createdMarker.setAttribute(IMarker.LINE_NUMBER, this.getLineNumber(node));
-			createdMarker.setAttribute(IMarker.CHAR_START, node.getStartPosition());
-			createdMarker.setAttribute(IMarker.CHAR_END, node.getStartPosition() + node.getLength());
-			createdMarker.setAttribute(AbstractASTRule.RULE_ID_KEY, this.getClass().getName());
-		} catch (final CoreException e) {
-			Activator.logException(e);
-		}
+		String markerId = this.ruleDescriptor.getRepository().getMarkerId();
+		int lineNumber = this.getLineNumber(node);
+		int startChar = node.getStartPosition();
+		int endChar = node.getStartPosition() + node.getLength();
+		this.problems.add(new ASTValidationProblem(message, isWarning, isError, resource.getName(), markerId,
+				lineNumber, startChar, endChar));
 	}
 
 	/**
@@ -167,9 +184,17 @@ public abstract class AbstractASTRule extends ASTVisitor {
 	 * @param node
 	 * @return
 	 */
-	private Object getLineNumber(final ASTNode node) {
+	private int getLineNumber(final ASTNode node) {
 		final int startPosition = node.getStartPosition();
 		return this.domCompilationUnit.getLineNumber(startPosition);
+	}
+
+	/**
+	 * 
+	 * @return list of problems raised by the last visit of this iterator
+	 */
+	public List<ASTValidationProblem> getProblems() {
+		return problems;
 	}
 
 }

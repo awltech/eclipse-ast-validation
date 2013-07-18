@@ -28,6 +28,7 @@ import java.util.List;
 import net.atos.jdt.ast.validation.engine.internal.Activator;
 import net.atos.jdt.ast.validation.engine.internal.ValidationEngineMessages;
 import net.atos.jdt.ast.validation.engine.internal.extpt.ASTRulesExtensionPoint;
+import net.atos.jdt.ast.validation.engine.rules.AbstractASTRule;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -113,7 +114,7 @@ public class ASTValidationEngine {
 
 		if (compilationUnit == null || !compilationUnit.exists())
 			return;
-		
+
 		final List<ASTRulesRepository> repositories = this.dataSource.getRepositories(this.validRepositories);
 		// At first remove the previous markers
 		final IResource resource = compilationUnit.getResource();
@@ -132,7 +133,10 @@ public class ASTValidationEngine {
 				final CompilationUnit domCompilationUnit = (CompilationUnit) parser
 						.createAST(new NullProgressMonitor());
 				try {
-					domCompilationUnit.accept(ruleDescriptor.getRule());
+					AbstractASTRule rule = ruleDescriptor.getRule();
+					domCompilationUnit.accept(rule);
+					for (ASTValidationProblem problem : rule.getProblems())
+						problem.toMarker(resource);
 				} catch (Exception e) {
 					Activator
 							.getDefault()

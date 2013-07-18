@@ -32,7 +32,10 @@ import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -54,6 +57,11 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 	 */
 	private Map<ASTRuleDescriptor, Boolean> states = new HashMap<ASTRuleDescriptor, Boolean>();
 
+	/**
+	 * Button temp state
+	 */
+	private boolean participantButtonEnabled;
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
@@ -74,18 +82,28 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 		// Builds graphical Structure
 		Composite background = new Composite(parent, SWT.NONE);
 		background.setLayout(new FormLayout());
-		// background.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_DARK_BLUE));
 
 		Label message = new Label(background, SWT.WRAP);
 		message.setText(RulesPreferencePagesMessages.PREFERENCE_LABEL.value());
 		new FormDataBuilder().horizontal().top().height(30).apply(message);
 
+		Button participantButton = new Button(background, SWT.CHECK);
+		participantButton.setText("Enable Compilation Unit Participant");
+		participantButton.setSelection(ASTRulesPreferences.isValidationParticipantEnabled());
+		participantButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				participantButtonEnabled = ((Button) e.widget).getSelection();
+			}
+		});
+		new FormDataBuilder().left().right().top(message).apply(participantButton);
+		
 		Label comboLabel = new Label(background, SWT.NONE);
 		comboLabel.setText(RulesPreferencePagesMessages.REPOSITORY_LABEL.value());
-		new FormDataBuilder().left().top(message).width(100).apply(comboLabel);
+		new FormDataBuilder().left().top(participantButton).width(100).apply(comboLabel);
 
 		Combo combo = new Combo(background, SWT.READ_ONLY);
-		new FormDataBuilder().left(comboLabel).top(message).right().apply(combo);
+		new FormDataBuilder().left(comboLabel).top(participantButton).right().apply(combo);
 
 		ComboViewer comboViewer = new ComboViewer(combo);
 		comboViewer.setContentProvider(new RulesRepositoriesContentProvider());
@@ -119,6 +137,12 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 	public boolean performOk() {
 		for (ASTRuleDescriptor descriptor : this.states.keySet())
 			ASTRulesPreferences.setEnabled(descriptor, this.states.get(descriptor));
+		
+		if (this.participantButtonEnabled)
+			ASTRulesPreferences.enableValidationParticipant();
+		else
+			ASTRulesPreferences.disableValidationParticipant();			
+		
 		return super.performOk();
 	}
 

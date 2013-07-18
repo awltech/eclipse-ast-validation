@@ -35,5 +35,15 @@
             name="AST Validation">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.jdt.core.compilationParticipant">
+      <compilationParticipant
+            class="net.atos.jdt.ast.validation.engine.internal.participant.ASTValidationParticipant"
+            createsProblems="true"
+            id="net.atos.jdt.ast.validation.engine.compilationParticipant1"
+            modifiesEnvironment="false"
+            requiredSourceLevel="JavaCore.VERSION_1_5">
+      </compilationParticipant>
+   </extension>
 
 </plugin>
