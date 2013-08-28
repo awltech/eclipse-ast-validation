@@ -22,8 +22,10 @@
 package net.atos.jdt.ast.validation.engine.internal.extpt.ui;
 
 import net.atos.jdt.ast.validation.engine.ASTRulesRepository;
+import net.atos.jdt.ast.validation.engine.internal.Activator;
 
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.graphics.Image;
 
 /**
  * Rules repository label provider
@@ -33,6 +35,20 @@ import org.eclipse.jface.viewers.LabelProvider;
  */
 public class RulesRepositoriesLabelProvider extends LabelProvider {
 
+	/**
+	 * Rule Repository
+	 */
+	private static final String ICON_RULE_REPOSITORY_GIF = "/icons/rule-repository.gif";
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
+	 */
+	@Override
+	public Image getImage(Object element) {
+		return Activator.getDefault().getImage(ICON_RULE_REPOSITORY_GIF);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

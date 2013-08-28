@@ -23,6 +23,8 @@ package net.atos.jdt.ast.validation.engine.internal;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -86,4 +88,43 @@ public class Activator extends AbstractUIPlugin {
 				.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "An exception was encountered", e));
 	}
 
+	 /**
+	  * Returns image in plugin
+	  *
+	  * @param pluginId
+	  *            : Id of the plugin containing thie image
+	  * @param imageFilePath
+	  *            : image File Path in plugin
+	  * @return Image if exists
+	  */
+	 public Image getImage(String imageFilePath) {
+	        Image image = Activator.getDefault().getImageRegistry().get(Activator.PLUGIN_ID + ":" + imageFilePath);
+	       if (image == null) {
+	               image = loadImage(Activator.PLUGIN_ID, imageFilePath);
+	       }
+	       return image;
+	}
+
+	/**
+	  * Loads image in Image Registry is not available in it
+	  *
+	  * @param pluginId
+	  *            : Id of the plugin containing thie image
+	  * @param imageFilePath
+	  *            : image File Path in plugin
+	  * @return Image if loaded
+	  */
+	 private synchronized Image loadImage(String pluginId, String imageFilePath) {
+	        String id = pluginId + ":" + imageFilePath;
+	        Image image = Activator.getDefault().getImageRegistry().get(id);
+	       if (image != null)
+	             return image;
+	        ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(pluginId, imageFilePath);
+	       if (imageDescriptor != null) {
+	              image = imageDescriptor.createImage();
+	              Activator.getDefault().getImageRegistry().put(pluginId + ":" + imageFilePath, image);
+	       }
+	       return image;
+	 }
+	
 }

@@ -88,7 +88,7 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 		new FormDataBuilder().horizontal().top().height(30).apply(message);
 
 		Button participantButton = new Button(background, SWT.CHECK);
-		participantButton.setText("Enable Compilation Unit Participant");
+		participantButton.setText(RulesPreferencePagesMessages.ENABLE_CUP.value());
 		participantButton.setSelection(ASTRulesPreferences.isValidationParticipantEnabled());
 		participantButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -96,14 +96,14 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 				participantButtonEnabled = ((Button) e.widget).getSelection();
 			}
 		});
-		new FormDataBuilder().left().right().top(message).apply(participantButton);
+		new FormDataBuilder().left().right().top(message, 15).apply(participantButton);
 		
 		Label comboLabel = new Label(background, SWT.NONE);
 		comboLabel.setText(RulesPreferencePagesMessages.REPOSITORY_LABEL.value());
-		new FormDataBuilder().left().top(participantButton).width(100).apply(comboLabel);
+		new FormDataBuilder().left().top(participantButton, 17).width(100).apply(comboLabel);
 
 		Combo combo = new Combo(background, SWT.READ_ONLY);
-		new FormDataBuilder().left(comboLabel).top(participantButton).right().apply(combo);
+		new FormDataBuilder().left(comboLabel).top(participantButton, 15).right().apply(combo);
 
 		ComboViewer comboViewer = new ComboViewer(combo);
 		comboViewer.setContentProvider(new RulesRepositoriesContentProvider());
