@@ -25,7 +25,7 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 public enum RulesPreferencePagesMessages {
-	PREFERENCE_LABEL, REPOSITORY_LABEL, GROUP_LABEL, ENABLE_CUP;
+	PREFERENCE_LABEL, REPOSITORY_LABEL, GROUP_LABEL, ENABLE_CUP, LINK_TO_QUICKSTART;
 
 	/*
 	 * ResourceBundle instance

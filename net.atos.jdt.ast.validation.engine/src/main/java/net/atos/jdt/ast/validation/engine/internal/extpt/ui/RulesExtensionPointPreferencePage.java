@@ -21,13 +21,18 @@
  */
 package net.atos.jdt.ast.validation.engine.internal.extpt.ui;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.atos.jdt.ast.validation.engine.ASTRuleDescriptor;
 import net.atos.jdt.ast.validation.engine.ASTRulesPreferences;
+import net.atos.jdt.ast.validation.engine.internal.Activator;
 import net.atos.jdt.ast.validation.engine.internal.extpt.ASTRulesExtensionPoint;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -41,14 +46,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWebBrowser;
+import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
 /**
  * Preference Page that contains the list of rules, to enable/disable them
+ * 
  * @author mvanbesien
- *
+ * 
  */
 public class RulesExtensionPointPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
@@ -61,10 +72,12 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 	 * Button temp state
 	 */
 	private boolean participantButtonEnabled;
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	 * 
+	 * @see
+	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	@Override
 	public void init(IWorkbench workbench) {
@@ -74,7 +87,10 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse.swt.widgets.Composite)
+	 * 
+	 * @see
+	 * org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse
+	 * .swt.widgets.Composite)
 	 */
 	@Override
 	protected Control createContents(Composite parent) {
@@ -97,7 +113,7 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 			}
 		});
 		new FormDataBuilder().left().right().top(message, 15).apply(participantButton);
-		
+
 		Label comboLabel = new Label(background, SWT.NONE);
 		comboLabel.setText(RulesPreferencePagesMessages.REPOSITORY_LABEL.value());
 		new FormDataBuilder().left().top(participantButton, 17).width(100).apply(comboLabel);
@@ -109,9 +125,14 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 		comboViewer.setContentProvider(new RulesRepositoriesContentProvider());
 		comboViewer.setLabelProvider(new RulesRepositoriesLabelProvider());
 
+		Link link = new Link(background, SWT.NONE);
+		link.setText(RulesPreferencePagesMessages.LINK_TO_QUICKSTART.value());
+		link.addSelectionListener(new OpenLinkActionSelectionAdapter());
+		new FormDataBuilder().bottom().left().right().apply(link);
+
 		Group group = new Group(background, SWT.NONE);
 		group.setLayout(new FormLayout());
-		new FormDataBuilder().horizontal().top(combo).bottom().apply(group);
+		new FormDataBuilder().horizontal().top(combo).bottom(link).apply(group);
 		group.setText(RulesPreferencePagesMessages.GROUP_LABEL.value());
 
 		Tree tree = new Tree(group, SWT.CHECK | SWT.BORDER);
@@ -131,19 +152,41 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.preference.PreferencePage#performOk()
 	 */
 	@Override
 	public boolean performOk() {
 		for (ASTRuleDescriptor descriptor : this.states.keySet())
 			ASTRulesPreferences.setEnabled(descriptor, this.states.get(descriptor));
-		
+
 		if (this.participantButtonEnabled)
 			ASTRulesPreferences.enableValidationParticipant();
 		else
-			ASTRulesPreferences.disableValidationParticipant();			
-		
+			ASTRulesPreferences.disableValidationParticipant();
+
 		return super.performOk();
+	}
+
+	private static final class OpenLinkActionSelectionAdapter extends SelectionAdapter {
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			IWorkbenchBrowserSupport browserSupport = PlatformUI.getWorkbench().getBrowserSupport();
+			IWebBrowser browser;
+			try {
+				browser = browserSupport.createBrowser(IWorkbenchBrowserSupport.LOCATION_BAR
+						| IWorkbenchBrowserSupport.NAVIGATION_BAR, null, "Web Browser", "Web Browser");
+				browser.openURL(new URL(e.text));
+			} catch (PartInitException e1) {
+				Activator.getDefault().getLog()
+						.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e1.getMessage(), e1));
+			} catch (MalformedURLException e1) {
+				Activator.getDefault().getLog()
+				.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e1.getMessage(), e1));
+			}
+
+		}
 	}
 
 }
