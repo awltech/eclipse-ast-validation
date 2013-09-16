@@ -3,5 +3,8 @@
    <feature url="features/net.atos.jdt.ast.validation.feature_1.1.0.qualifier.jar" id="net.atos.jdt.ast.validation.feature" version="1.1.0.qualifier">
       <category name="AST Rules Validation Lite Engine"/>
    </feature>
+   <feature url="features/net.atos.jdt.ast.validation.sdk.feature_1.1.0.qualifier.jar" id="net.atos.jdt.ast.validation.sdk.feature" version="1.1.0.qualifier">
+      <category name="AST Rules Validation Lite Engine"/>
+   </feature>
    <category-def name="AST Rules Validation Lite Engine" label="AST Rules Validation Lite Engine"/>
 </site>
