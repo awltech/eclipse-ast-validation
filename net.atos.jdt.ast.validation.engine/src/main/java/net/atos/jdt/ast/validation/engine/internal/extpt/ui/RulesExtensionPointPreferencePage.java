@@ -54,6 +54,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
+import net.atos.jdt.ast.validation.engine.internal.extpt.ui.RulesPreferencePagesMessages;
 
 /**
  * Preference Page that contains the list of rules, to enable/disable them
@@ -105,6 +106,7 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 
 		Button participantButton = new Button(background, SWT.CHECK);
 		participantButton.setText(RulesPreferencePagesMessages.ENABLE_CUP.value());
+		participantButton.setToolTipText(RulesPreferencePagesMessages.ENABLE_CUP_TOOLTIP.value());
 		participantButton.setSelection(ASTRulesPreferences.isValidationParticipantEnabled());
 		participantButton.addSelectionListener(new SelectionAdapter() {
 			@Override
