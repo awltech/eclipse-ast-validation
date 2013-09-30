@@ -92,7 +92,24 @@ public class ASTRuleDescriptor {
 	 * @return rule
 	 */
 	public AbstractASTRule getRule() {
-		return rule;
+		if (ASTRulesPreferences.areRulesSingletons())
+			return rule;
+		else 
+			return this.cloneRule();
+	}
+
+	
+	private AbstractASTRule cloneRule() {
+		Class<? extends ASTRuleDescriptor> clazz = this.getClass();
+		try {
+			ASTRuleDescriptor newInstance = clazz.newInstance();
+			newInstance.setRuleRepository(this.repository);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**

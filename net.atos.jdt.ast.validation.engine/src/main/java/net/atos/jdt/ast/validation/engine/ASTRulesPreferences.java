@@ -37,6 +37,11 @@ public class ASTRulesPreferences {
 	private static final String PARTICIPANT_DISABLED = "participant.disabled";
 
 	/**
+	 * Key for participant enablement/disablement
+	 */
+	private static final String RULES_ARE_SINGLETONS = "rules.are.singletons";
+
+	/**
 	 * Enablement of Validation Participant
 	 */
 	public static void enableValidationParticipant() {
@@ -109,6 +114,33 @@ public class ASTRulesPreferences {
 	 */
 	private static String getParticipantKey() {
 		return PARTICIPANT_DISABLED;
+	}
+
+	/**
+	 * returns true if same rule instance is used across executions.
+	 * 
+	 * @return
+	 */
+	public static boolean areRulesSingletons() {
+		String key = ASTRulesPreferences.areRulesSingletonsKey();
+		return Activator.getDefault().getPreferenceStore().getBoolean(key);
+	}
+
+	/**
+	 * 
+	 * @param use true if same rule instance should be used across executions.
+	 */
+	public static void setUseRulesAsSingletons(boolean use) {
+		String key = ASTRulesPreferences.areRulesSingletonsKey();
+		Activator.getDefault().getPreferenceStore().setValue(key, use);
+	}
+
+	/**
+	 * Returns the key for the singleton option
+	 * @return
+	 */
+	private static String areRulesSingletonsKey() {
+		return RULES_ARE_SINGLETONS;
 	}
 
 }

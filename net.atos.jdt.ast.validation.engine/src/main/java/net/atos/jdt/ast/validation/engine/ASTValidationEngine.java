@@ -23,7 +23,9 @@ package net.atos.jdt.ast.validation.engine;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.atos.jdt.ast.validation.engine.internal.Activator;
 import net.atos.jdt.ast.validation.engine.internal.ValidationEngineMessages;
@@ -62,6 +64,23 @@ public class ASTValidationEngine {
 	 * Rules Source, used to retrieve the rules during execution
 	 */
 	private IASTRulesDataSource dataSource;
+
+	/**
+	 * Session to send to the executed rules
+	 */
+	private Map<String, Object> session = new HashMap<String, Object>();
+
+	/**
+	 * Replaces the session by the one provided as a parameter.
+	 * 
+	 * @param session
+	 * @return
+	 */
+	public ASTValidationEngine withSession(Map<String, Object> session) {
+		this.session.clear();
+		this.session.putAll(session);
+		return this;
+	}
 
 	/**
 	 * Creates new Validation Engine for Compilation Units as from parameters
@@ -134,6 +153,7 @@ public class ASTValidationEngine {
 						.createAST(new NullProgressMonitor());
 				try {
 					AbstractASTRule rule = ruleDescriptor.getRule();
+					rule.setSession(this.session);
 					domCompilationUnit.accept(rule);
 					for (ASTValidationProblem problem : rule.getProblems())
 						problem.toMarker(resource);

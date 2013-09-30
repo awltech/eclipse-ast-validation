@@ -22,7 +22,9 @@
 package net.atos.jdt.ast.validation.engine.rules;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.atos.jdt.ast.validation.engine.ASTRuleDescriptor;
 import net.atos.jdt.ast.validation.engine.ASTValidationProblem;
@@ -75,6 +77,11 @@ public abstract class AbstractASTRule extends ASTVisitor {
 	 * Problems raised during visit.
 	 */
 	private List<ASTValidationProblem> problems = new ArrayList<ASTValidationProblem>();
+
+	/**
+	 * Session containing properties from caller
+	 */
+	private Map<String, Object> session = new HashMap<String, Object>();
 
 	/**
 	 * Sets the rule repository. should not be invoked by clients
@@ -190,11 +197,27 @@ public abstract class AbstractASTRule extends ASTVisitor {
 	}
 
 	/**
-	 * 
 	 * @return list of problems raised by the last visit of this iterator
 	 */
 	public List<ASTValidationProblem> getProblems() {
 		return problems;
+	}
+
+	/**
+	 * Sets the current execution session
+	 * @param session
+	 */
+	public void setSession(Map<String, Object> session) {
+		this.session.clear();
+		this.session.putAll(session);
+	}
+	
+	/**
+	 * Returns the current internal session
+	 * @return
+	 */
+	public Map<String, Object> getSession() {
+		return session;
 	}
 
 }

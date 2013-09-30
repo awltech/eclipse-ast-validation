@@ -74,6 +74,8 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 	 */
 	private boolean participantButtonEnabled;
 
+	private boolean rulesAreSingletons;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -115,13 +117,27 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 			}
 		});
 		new FormDataBuilder().left().right().top(message, 15).apply(participantButton);
+		//
+		Button rulesSingletonButton = new Button(background, SWT.CHECK);
+		rulesSingletonButton.setText(RulesPreferencePagesMessages.ENABLE_SINGLETONS.value());
+		rulesSingletonButton
+				.setToolTipText(RulesPreferencePagesMessages.ENABLE_SINGLETONS_TOOLTIP.value());
+		rulesSingletonButton.setSelection(ASTRulesPreferences.areRulesSingletons());
+		rulesSingletonButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				rulesAreSingletons = ((Button) e.widget).getSelection();
+			}
+		});
+		//
+		new FormDataBuilder().left().right().top(participantButton).apply(rulesSingletonButton);
 
 		Label comboLabel = new Label(background, SWT.NONE);
 		comboLabel.setText(RulesPreferencePagesMessages.REPOSITORY_LABEL.value());
-		new FormDataBuilder().left().top(participantButton, 17).width(100).apply(comboLabel);
+		new FormDataBuilder().left().top(rulesSingletonButton, 17).width(100).apply(comboLabel);
 
 		Combo combo = new Combo(background, SWT.READ_ONLY);
-		new FormDataBuilder().left(comboLabel).top(participantButton, 15).right().apply(combo);
+		new FormDataBuilder().left(comboLabel).top(rulesSingletonButton, 15).right().apply(combo);
 
 		ComboViewer comboViewer = new ComboViewer(combo);
 		comboViewer.setContentProvider(new RulesRepositoriesContentProvider());
@@ -167,6 +183,8 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 		else
 			ASTRulesPreferences.disableValidationParticipant();
 
+		ASTRulesPreferences.setUseRulesAsSingletons(this.rulesAreSingletons);
+
 		return super.performOk();
 	}
 
@@ -185,7 +203,7 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 						.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e1.getMessage(), e1));
 			} catch (MalformedURLException e1) {
 				Activator.getDefault().getLog()
-				.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e1.getMessage(), e1));
+						.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e1.getMessage(), e1));
 			}
 
 		}
