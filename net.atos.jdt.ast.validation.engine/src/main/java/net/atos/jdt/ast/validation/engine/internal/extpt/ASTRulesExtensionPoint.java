@@ -31,7 +31,6 @@ import net.atos.jdt.ast.validation.engine.ASTRulesRepository;
 import net.atos.jdt.ast.validation.engine.IASTRulesDataSource;
 import net.atos.jdt.ast.validation.engine.internal.Activator;
 import net.atos.jdt.ast.validation.engine.internal.ValidationEngineMessages;
-import net.atos.jdt.ast.validation.engine.rules.AbstractASTRule;
 import net.atos.jdt.ast.validation.engine.rules.AbstractProjectContext;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -51,7 +50,6 @@ import org.eclipse.core.runtime.Status;
  */
 public class ASTRulesExtensionPoint implements IASTRulesDataSource {
 
-	
 	// Constants of Extension point
 	private static final String MANDATORY = "mandatory";
 	private static final String RULE = "rule";
@@ -123,9 +121,9 @@ public class ASTRulesExtensionPoint implements IASTRulesDataSource {
 						try {
 							final String description = contextElement.getAttribute(DESCRIPTION);
 							final boolean mandatory = Boolean.valueOf(contextElement.getAttribute(MANDATORY));
-							final AbstractASTRule rule = (AbstractASTRule) contextElement
-									.createExecutableExtension(ASTRulesExtensionPoint.IMPLEMENTATION);
-							repository.registerRule(new ASTRuleDescriptor(description, rule, mandatory));
+							final ASTExtensionPointRulesFactory factory = new ASTExtensionPointRulesFactory(
+									contextElement, ASTRulesExtensionPoint.IMPLEMENTATION);
+							repository.registerRule(new ASTRuleDescriptor(description, factory, mandatory));
 						} catch (final Exception e) {
 							Activator
 									.getDefault()

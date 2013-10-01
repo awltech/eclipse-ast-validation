@@ -23,10 +23,6 @@ package net.atos.jdt.ast.validation.engine;
 
 import java.util.UUID;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-
-import net.atos.jdt.ast.validation.engine.internal.Activator;
 import net.atos.jdt.ast.validation.engine.rules.AbstractASTRule;
 
 /**
@@ -50,12 +46,17 @@ public class ASTRuleDescriptor {
 	/**
 	 * Rule implementation
 	 */
-	private AbstractASTRule rule;
+	private AbstractASTRule singletonRule;
 
 	/**
 	 * Rule implementation
 	 */
 	private ASTRulesRepository repository;
+
+	/**
+	 * Rule Factory
+	 */
+	private AbstractASTRuleFactory ruleFactory;
 
 	/**
 	 * True is the rule cannot be disabled/bypassed. false otherwise
@@ -67,14 +68,15 @@ public class ASTRuleDescriptor {
 	 * 
 	 * @param id
 	 * @param description
-	 * @param rule
+	 * @param ruleFactory
 	 * @param mandatory
 	 */
-	public ASTRuleDescriptor(String description, AbstractASTRule rule, boolean mandatory) {
+	public ASTRuleDescriptor(String description, AbstractASTRuleFactory ruleFactory, boolean mandatory) {
 		this.id = UUID.randomUUID().toString();
 		this.description = description != null ? description : "";
-		this.rule = rule;
-		this.rule.setRuleDescriptor(this);
+		this.ruleFactory = ruleFactory;
+		this.singletonRule = this.createRule();
+		this.singletonRule.setRuleDescriptor(this);
 		this.mandatory = mandatory;
 	}
 
@@ -96,24 +98,19 @@ public class ASTRuleDescriptor {
 	 * @return rule
 	 */
 	public AbstractASTRule getRule() {
-		if (ASTRulesPreferences.areRulesSingletons())
-			return rule;
-		else 
-			return this.cloneRule();
+		if (ASTRulesPreferences.areRulesSingletons()) {
+			return singletonRule;
+		} else
+			return this.createRule();
 	}
 
-	
-	private AbstractASTRule cloneRule() {
-		Class<? extends ASTRuleDescriptor> clazz = this.getClass();
-		try {
-			ASTRuleDescriptor newInstance = clazz.newInstance();
-			newInstance.setRuleRepository(this.repository);
-		} catch (InstantiationException e) {
-			Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID, e.getMessage(), e));
-		} catch (IllegalAccessException e) {
-			Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID, e.getMessage(), e));
-		}
-		return this.rule;
+	/**
+	 * Creates a rule
+	 * 
+	 * @return
+	 */
+	private AbstractASTRule createRule() {
+		return this.ruleFactory != null ? this.ruleFactory.create() : null;
 	}
 
 	/**
@@ -132,24 +129,44 @@ public class ASTRuleDescriptor {
 		this.repository = repository;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		return this.id.hashCode();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof ASTRuleDescriptor))
 			return false;
 		return this.id.equals(((ASTRuleDescriptor) obj).id);
 	}
-	
+
 	/**
 	 * Returns whether this rule is a rule that can be disabled.
+	 * 
 	 * @return
 	 */
 	public boolean isMandatory() {
 		return mandatory;
+	}
+
+	/**
+	 * Returns the class name of the rule. This is mainly an utility method
+	 * 
+	 * @return
+	 */
+	public String getRuleClassName() {
+		return this.singletonRule.getClass().getName();
 	}
 
 }

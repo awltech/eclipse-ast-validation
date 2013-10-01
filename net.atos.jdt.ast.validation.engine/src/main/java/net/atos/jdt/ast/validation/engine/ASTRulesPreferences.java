@@ -103,7 +103,7 @@ public class ASTRulesPreferences {
 	 * @return
 	 */
 	private static String getRuleKeyFor(ASTRuleDescriptor descriptor) {
-		return "rule.disabled." + descriptor.getRule().getClass().getName();
+		return "rule.disabled." + descriptor.getRuleClassName();
 	}
 
 	/**
