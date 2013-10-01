@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.Status;
  * Rule Factory when the rule comes from an extension point.
  * 
  * @author mvanbesien
+ * @since 1.1
  * 
  */
 public class ASTExtensionPointRulesFactory extends AbstractASTRuleFactory {

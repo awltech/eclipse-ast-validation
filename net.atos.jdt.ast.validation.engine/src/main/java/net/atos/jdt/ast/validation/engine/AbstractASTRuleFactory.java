@@ -27,6 +27,7 @@ import net.atos.jdt.ast.validation.engine.rules.AbstractASTRule;
  * Abstract Rule Factory contract.
  * 
  * @author mvanbesien
+ * @since 1.1
  * 
  */
 public abstract class AbstractASTRuleFactory {
