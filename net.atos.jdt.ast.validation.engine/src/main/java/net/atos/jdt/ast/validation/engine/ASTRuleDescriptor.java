@@ -23,6 +23,10 @@ package net.atos.jdt.ast.validation.engine;
 
 import java.util.UUID;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
+import net.atos.jdt.ast.validation.engine.internal.Activator;
 import net.atos.jdt.ast.validation.engine.rules.AbstractASTRule;
 
 /**
@@ -105,11 +109,11 @@ public class ASTRuleDescriptor {
 			ASTRuleDescriptor newInstance = clazz.newInstance();
 			newInstance.setRuleRepository(this.repository);
 		} catch (InstantiationException e) {
-			e.printStackTrace();
+			Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID, e.getMessage(), e));
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID, e.getMessage(), e));
 		}
-		return null;
+		return this.rule;
 	}
 
 	/**
