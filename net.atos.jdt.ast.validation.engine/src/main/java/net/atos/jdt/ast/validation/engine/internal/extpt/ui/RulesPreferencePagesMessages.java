@@ -36,9 +36,10 @@ public enum RulesPreferencePagesMessages {
 	 * Returns value of the message
 	 */
 	public String value() {
-		if (RulesPreferencePagesMessages.resourceBundle == null
-				|| !RulesPreferencePagesMessages.resourceBundle.containsKey(this.name()))
+		if ((RulesPreferencePagesMessages.resourceBundle == null)
+				|| !RulesPreferencePagesMessages.resourceBundle.containsKey(this.name())) {
 			return "!!" + this.name() + "!!";
+		}
 
 		return RulesPreferencePagesMessages.resourceBundle.getString(this.name());
 	}
@@ -46,10 +47,11 @@ public enum RulesPreferencePagesMessages {
 	/*
 	 * Returns value of the formatted message
 	 */
-	public String value(Object... args) {
-		if (RulesPreferencePagesMessages.resourceBundle == null
-				|| !RulesPreferencePagesMessages.resourceBundle.containsKey(this.name()))
+	public String value(final Object... args) {
+		if ((RulesPreferencePagesMessages.resourceBundle == null)
+				|| !RulesPreferencePagesMessages.resourceBundle.containsKey(this.name())) {
 			return "!!" + this.name() + "!!";
+		}
 
 		return MessageFormat.format(RulesPreferencePagesMessages.resourceBundle.getString(this.name()), args);
 	}

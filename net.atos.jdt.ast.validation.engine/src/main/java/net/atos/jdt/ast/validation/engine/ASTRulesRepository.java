@@ -27,7 +27,6 @@ import java.util.Set;
 import net.atos.jdt.ast.validation.engine.rules.AbstractProjectContext;
 
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.dom.CompilationUnit;
 
 /**
  * AST Rule Repository. Contains rules and information about context & markers.
@@ -57,7 +56,7 @@ public class ASTRulesRepository {
 		 * (org.eclipse.jdt.core.ICompilationUnit)
 		 */
 		@Override
-		public boolean validate(ICompilationUnit compilationUnit) {
+		public boolean validate(final ICompilationUnit compilationUnit) {
 			return true;
 		}
 
@@ -112,7 +111,7 @@ public class ASTRulesRepository {
 	public Set<ASTRuleDescriptor> getRules(final ICompilationUnit compilationUnit) {
 		final Set<ASTRuleDescriptor> rules = new HashSet<ASTRuleDescriptor>();
 		for (final ASTRuleDescriptor rule : this.rules) {
-			boolean ruleEnabled = rule.isMandatory() || ASTRulesPreferences.isEnabled(rule);
+			final boolean ruleEnabled = rule.isMandatory() || ASTRulesPreferences.isEnabled(rule);
 			if (ruleEnabled && this.context.validate(compilationUnit)) {
 				rules.add(rule);
 			}
@@ -168,8 +167,8 @@ public class ASTRulesRepository {
 	 * @param javaProject
 	 * @return
 	 */
-	public boolean isEnabled(ICompilationUnit compilationUnit) {
-		return context.validate(compilationUnit);
+	public boolean isEnabled(final ICompilationUnit compilationUnit) {
+		return this.context.validate(compilationUnit);
 	}
 
 }

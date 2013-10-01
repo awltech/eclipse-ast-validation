@@ -42,22 +42,24 @@ public class RulesRepositoriesLabelProvider extends LabelProvider {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
 	 */
 	@Override
-	public Image getImage(Object element) {
-		return Activator.getDefault().getImage(ICON_RULE_REPOSITORY_GIF);
+	public Image getImage(final Object element) {
+		return Activator.getDefault().getImage(RulesRepositoriesLabelProvider.ICON_RULE_REPOSITORY_GIF);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
 	 */
 	@Override
-	public String getText(Object element) {
-		if (element instanceof ASTRulesRepository)
+	public String getText(final Object element) {
+		if (element instanceof ASTRulesRepository) {
 			return ((ASTRulesRepository) element).getId();
+		}
 		return "";
 	}
 

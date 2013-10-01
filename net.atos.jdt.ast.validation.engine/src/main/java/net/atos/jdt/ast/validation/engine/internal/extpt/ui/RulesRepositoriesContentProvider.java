@@ -31,13 +31,15 @@ import org.eclipse.jface.viewers.Viewer;
 
 /**
  * Rules Repositories content Provider
+ * 
  * @author mvanbesien
- *
+ * 
  */
 public class RulesRepositoriesContentProvider implements IStructuredContentProvider {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
 	 */
 	@Override
@@ -46,21 +48,27 @@ public class RulesRepositoriesContentProvider implements IStructuredContentProvi
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface
+	 * .viewers.Viewer, java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java
+	 * .lang.Object)
 	 */
 	@Override
-	public Object[] getElements(Object inputElement) {
-		
+	public Object[] getElements(final Object inputElement) {
+
 		if (inputElement instanceof IASTRulesDataSource) {
-			List<Object> objects = new ArrayList<Object>();
+			final List<Object> objects = new ArrayList<Object>();
 			objects.addAll(((IASTRulesDataSource) inputElement).getRepositories());
 			return objects.toArray();
 		}

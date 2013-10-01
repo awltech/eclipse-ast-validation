@@ -39,7 +39,7 @@ public class RulesCheckListener implements ICheckStateListener {
 	/**
 	 * List of temp states
 	 */
-	private Map<ASTRuleDescriptor, Boolean> states;
+	private final Map<ASTRuleDescriptor, Boolean> states;
 
 	/**
 	 * New Check Listener instance
@@ -47,7 +47,7 @@ public class RulesCheckListener implements ICheckStateListener {
 	 * @param states
 	 *            , map to be populated with temp states
 	 */
-	public RulesCheckListener(Map<ASTRuleDescriptor, Boolean> states) {
+	public RulesCheckListener(final Map<ASTRuleDescriptor, Boolean> states) {
 		this.states = states;
 	}
 
@@ -59,10 +59,10 @@ public class RulesCheckListener implements ICheckStateListener {
 	 * .jface.viewers.CheckStateChangedEvent)
 	 */
 	@Override
-	public void checkStateChanged(CheckStateChangedEvent event) {
-		Object element = event.getElement();
+	public void checkStateChanged(final CheckStateChangedEvent event) {
+		final Object element = event.getElement();
 		if (element instanceof ASTRuleDescriptor) {
-			ASTRuleDescriptor descriptor = (ASTRuleDescriptor) element;
+			final ASTRuleDescriptor descriptor = (ASTRuleDescriptor) element;
 
 			// If element is mandatory, it should always remain checked !
 			if (descriptor.isMandatory()) {
@@ -71,9 +71,10 @@ public class RulesCheckListener implements ICheckStateListener {
 			}
 
 			// Now, if not mandatory, we save the state.
-			if (states.containsKey(descriptor))
-				states.remove(descriptor);
-			states.put(descriptor, !event.getChecked());
+			if (this.states.containsKey(descriptor)) {
+				this.states.remove(descriptor);
+			}
+			this.states.put(descriptor, !event.getChecked());
 		}
 	}
 }

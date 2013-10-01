@@ -45,7 +45,7 @@ public class ASTRulesPreferences {
 	 * Enablement of Validation Participant
 	 */
 	public static void enableValidationParticipant() {
-		String key = ASTRulesPreferences.getParticipantKey();
+		final String key = ASTRulesPreferences.getParticipantKey();
 		Activator.getDefault().getPreferenceStore().setValue(key, false);
 	}
 
@@ -53,7 +53,7 @@ public class ASTRulesPreferences {
 	 * Enablement of Validation Participant
 	 */
 	public static void disableValidationParticipant() {
-		String key = ASTRulesPreferences.getParticipantKey();
+		final String key = ASTRulesPreferences.getParticipantKey();
 		Activator.getDefault().getPreferenceStore().setValue(key, true);
 	}
 
@@ -62,37 +62,37 @@ public class ASTRulesPreferences {
 	 *         enabled.
 	 */
 	public static boolean isValidationParticipantEnabled() {
-		String key = ASTRulesPreferences.getParticipantKey();
+		final String key = ASTRulesPreferences.getParticipantKey();
 		return !Activator.getDefault().getPreferenceStore().getBoolean(key);
 	}
 
 	/**
 	 * Enable rule in preferences
 	 */
-	public static void enable(ASTRuleDescriptor descriptor) {
+	public static void enable(final ASTRuleDescriptor descriptor) {
 		ASTRulesPreferences.setEnabled(descriptor, false);
 	}
 
 	/**
 	 * Disable rule in preferences
 	 */
-	public static void disable(ASTRuleDescriptor descriptor) {
+	public static void disable(final ASTRuleDescriptor descriptor) {
 		ASTRulesPreferences.setEnabled(descriptor, true);
 	}
 
 	/**
 	 * enable/disable rule in preferences
 	 */
-	public static void setEnabled(ASTRuleDescriptor descriptor, boolean value) {
-		String key = ASTRulesPreferences.getRuleKeyFor(descriptor);
+	public static void setEnabled(final ASTRuleDescriptor descriptor, final boolean value) {
+		final String key = ASTRulesPreferences.getRuleKeyFor(descriptor);
 		Activator.getDefault().getPreferenceStore().setValue(key, value);
 	}
 
 	/**
 	 * Checks rule's enablement in preferences
 	 */
-	public static boolean isEnabled(ASTRuleDescriptor descriptor) {
-		String key = ASTRulesPreferences.getRuleKeyFor(descriptor);
+	public static boolean isEnabled(final ASTRuleDescriptor descriptor) {
+		final String key = ASTRulesPreferences.getRuleKeyFor(descriptor);
 		return !Activator.getDefault().getPreferenceStore().getBoolean(key);
 	}
 
@@ -102,7 +102,7 @@ public class ASTRulesPreferences {
 	 * @param descriptor
 	 * @return
 	 */
-	private static String getRuleKeyFor(ASTRuleDescriptor descriptor) {
+	private static String getRuleKeyFor(final ASTRuleDescriptor descriptor) {
 		return "rule.disabled." + descriptor.getRuleClassName();
 	}
 
@@ -113,7 +113,7 @@ public class ASTRulesPreferences {
 	 * @return
 	 */
 	private static String getParticipantKey() {
-		return PARTICIPANT_DISABLED;
+		return ASTRulesPreferences.PARTICIPANT_DISABLED;
 	}
 
 	/**
@@ -122,25 +122,27 @@ public class ASTRulesPreferences {
 	 * @return
 	 */
 	public static boolean areRulesSingletons() {
-		String key = ASTRulesPreferences.areRulesSingletonsKey();
+		final String key = ASTRulesPreferences.areRulesSingletonsKey();
 		return Activator.getDefault().getPreferenceStore().getBoolean(key);
 	}
 
 	/**
 	 * 
-	 * @param use true if same rule instance should be used across executions.
+	 * @param use
+	 *            true if same rule instance should be used across executions.
 	 */
-	public static void setUseRulesAsSingletons(boolean use) {
-		String key = ASTRulesPreferences.areRulesSingletonsKey();
+	public static void setUseRulesAsSingletons(final boolean use) {
+		final String key = ASTRulesPreferences.areRulesSingletonsKey();
 		Activator.getDefault().getPreferenceStore().setValue(key, use);
 	}
 
 	/**
 	 * Returns the key for the singleton option
+	 * 
 	 * @return
 	 */
 	private static String areRulesSingletonsKey() {
-		return RULES_ARE_SINGLETONS;
+		return ASTRulesPreferences.RULES_ARE_SINGLETONS;
 	}
 
 }

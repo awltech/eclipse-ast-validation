@@ -76,12 +76,12 @@ public abstract class AbstractASTRule extends ASTVisitor {
 	/**
 	 * Problems raised during visit.
 	 */
-	private List<ASTValidationProblem> problems = new ArrayList<ASTValidationProblem>();
+	private final List<ASTValidationProblem> problems = new ArrayList<ASTValidationProblem>();
 
 	/**
 	 * Session containing properties from caller
 	 */
-	private Map<String, Object> session = new HashMap<String, Object>();
+	private final Map<String, Object> session = new HashMap<String, Object>();
 
 	/**
 	 * Sets the rule repository. should not be invoked by clients
@@ -162,8 +162,8 @@ public abstract class AbstractASTRule extends ASTVisitor {
 	 */
 	@Deprecated
 	protected void addMarker(final ASTNode node, final String message, final int severity) {
-		boolean isWarning = severity == IMarker.SEVERITY_WARNING;
-		boolean isError = severity == IMarker.SEVERITY_ERROR;
+		final boolean isWarning = severity == IMarker.SEVERITY_WARNING;
+		final boolean isError = severity == IMarker.SEVERITY_ERROR;
 		this.addMarker(node, message, isWarning, isError);
 	}
 
@@ -177,10 +177,10 @@ public abstract class AbstractASTRule extends ASTVisitor {
 	 */
 	protected void addMarker(final ASTNode node, final String message, final boolean isWarning, final boolean isError) {
 		final IResource resource = this.compilationUnit.getResource();
-		String markerId = this.ruleDescriptor.getRepository().getMarkerId();
-		int lineNumber = this.getLineNumber(node);
-		int startChar = node.getStartPosition();
-		int endChar = node.getStartPosition() + node.getLength();
+		final String markerId = this.ruleDescriptor.getRepository().getMarkerId();
+		final int lineNumber = this.getLineNumber(node);
+		final int startChar = node.getStartPosition();
+		final int endChar = node.getStartPosition() + node.getLength();
 		this.problems.add(new ASTValidationProblem(message, isWarning, isError, resource.getName(), markerId,
 				lineNumber, startChar, endChar));
 	}
@@ -200,24 +200,26 @@ public abstract class AbstractASTRule extends ASTVisitor {
 	 * @return list of problems raised by the last visit of this iterator
 	 */
 	public List<ASTValidationProblem> getProblems() {
-		return problems;
+		return this.problems;
 	}
 
 	/**
 	 * Sets the current execution session
+	 * 
 	 * @param session
 	 */
-	public void setSession(Map<String, Object> session) {
+	public void setSession(final Map<String, Object> session) {
 		this.session.clear();
 		this.session.putAll(session);
 	}
-	
+
 	/**
 	 * Returns the current internal session
+	 * 
 	 * @return
 	 */
 	public Map<String, Object> getSession() {
-		return session;
+		return this.session;
 	}
 
 }

@@ -23,7 +23,6 @@ package net.atos.jdt.ast.validation.engine;
 
 import java.util.List;
 
-
 /**
  * Interface that implementations that produce rules have to implement.
  * 

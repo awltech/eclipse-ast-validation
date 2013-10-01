@@ -40,42 +40,42 @@ public class ASTValidationProblem extends CategorizedProblem {
 	/**
 	 * Problem message
 	 */
-	private String message;
+	private final String message;
 
 	/**
 	 * true if warning, false otherwise
 	 */
-	private boolean isWarning;
+	private final boolean isWarning;
 
 	/**
 	 * true if error, false otherwise
 	 */
-	private boolean isError;
+	private final boolean isError;
 
 	/**
 	 * Name of the file that holds the error
 	 */
-	private String fileName;
+	private final String fileName;
 
 	/**
 	 * Marker identifier
 	 */
-	private String markerId;
+	private final String markerId;
 
 	/**
 	 * Line where the problem happens
 	 */
-	private int lineNumber;
+	private final int lineNumber;
 
 	/**
 	 * Position in the source where the problems occurs
 	 */
-	private int startChar;
+	private final int startChar;
 
 	/**
 	 * Position in the source, identifing the end of the problem.
 	 */
-	private int endChar;
+	private final int endChar;
 
 	/**
 	 * Creates a new Validation Problem instance
@@ -97,8 +97,8 @@ public class ASTValidationProblem extends CategorizedProblem {
 	 * @param endChar
 	 *            position in the source where ends the problem
 	 */
-	public ASTValidationProblem(String message, boolean isWarning, boolean isError, String fileName, String markerId,
-			int lineNumber, int startChar, int endChar) {
+	public ASTValidationProblem(final String message, final boolean isWarning, final boolean isError,
+			final String fileName, final String markerId, final int lineNumber, final int startChar, final int endChar) {
 		this.message = message;
 		this.isWarning = isWarning;
 		this.isError = isError;
@@ -187,7 +187,7 @@ public class ASTValidationProblem extends CategorizedProblem {
 	 * @see org.eclipse.jdt.core.compiler.IProblem#setSourceEnd(int)
 	 */
 	@Override
-	public void setSourceEnd(int sourceEnd) {
+	public void setSourceEnd(final int sourceEnd) {
 		throw new UnsupportedOperationException("ASTValidationProblem instances are unmodifiable");
 	}
 
@@ -197,7 +197,7 @@ public class ASTValidationProblem extends CategorizedProblem {
 	 * @see org.eclipse.jdt.core.compiler.IProblem#setSourceLineNumber(int)
 	 */
 	@Override
-	public void setSourceLineNumber(int lineNumber) {
+	public void setSourceLineNumber(final int lineNumber) {
 		throw new UnsupportedOperationException("ASTValidationProblem instances are unmodifiable");
 	}
 
@@ -207,7 +207,7 @@ public class ASTValidationProblem extends CategorizedProblem {
 	 * @see org.eclipse.jdt.core.compiler.IProblem#setSourceStart(int)
 	 */
 	@Override
-	public void setSourceStart(int sourceStart) {
+	public void setSourceStart(final int sourceStart) {
 		throw new UnsupportedOperationException("ASTValidationProblem instances are unmodifiable");
 	}
 
@@ -237,7 +237,7 @@ public class ASTValidationProblem extends CategorizedProblem {
 	 * 
 	 * @param resource
 	 */
-	public void toMarker(IResource resource) {
+	public void toMarker(final IResource resource) {
 
 		try {
 			final IMarker createdMarker = resource.createMarker(this.getMarkerType());
@@ -247,10 +247,11 @@ public class ASTValidationProblem extends CategorizedProblem {
 			createdMarker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
 
 			int severity = IMarker.SEVERITY_INFO;
-			if (this.isError())
+			if (this.isError()) {
 				severity = IMarker.SEVERITY_ERROR;
-			else if (this.isWarning())
+			} else if (this.isWarning()) {
 				severity = IMarker.SEVERITY_WARNING;
+			}
 
 			createdMarker.setAttribute(IMarker.SEVERITY, severity);
 			createdMarker.setAttribute(IMarker.TRANSIENT, false);

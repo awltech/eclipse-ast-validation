@@ -74,17 +74,19 @@ public class ValidationProjectBuilder extends IncrementalProjectBuilder {
 		if (kind == IncrementalProjectBuilder.FULL_BUILD) {
 			final IProject project = this.getProject();
 			final IJavaProject javaProject = JavaCore.create(project);
-			if (javaProject != null && javaProject.exists()) {
+			if ((javaProject != null) && javaProject.exists()) {
 				monitor.subTask(ValidationEngineMessages.RETRIEVING_CU.value());
 				compilationUnits.addAll(this.retrieveCompilationUnits(javaProject));
 			}
-		} else if (kind == IncrementalProjectBuilder.AUTO_BUILD || kind == IncrementalProjectBuilder.INCREMENTAL_BUILD) {
+		} else if ((kind == IncrementalProjectBuilder.AUTO_BUILD)
+				|| (kind == IncrementalProjectBuilder.INCREMENTAL_BUILD)) {
 			// If build is an incremental build, we retrieve the elements being
 			// built and we gather the compilation units within
 			final IResourceDelta delta = this.getDelta(this.getProject());
 			monitor.subTask(ValidationEngineMessages.RETRIEVING_CU.value());
 			delta.accept(new IResourceDeltaVisitor() {
 
+				@Override
 				public boolean visit(final IResourceDelta delta) throws CoreException {
 					final IResource affectedResource = delta.getResource();
 					final IJavaElement affectedJavaResource = JavaCore.create(affectedResource);

@@ -36,17 +36,17 @@ public class ASTRuleDescriptor {
 	/**
 	 * Rule ID
 	 */
-	private String id;
+	private final String id;
 
 	/**
 	 * Rule Description
 	 */
-	private String description;
+	private final String description;
 
 	/**
 	 * Rule implementation
 	 */
-	private AbstractASTRule singletonRule;
+	private final AbstractASTRule singletonRule;
 
 	/**
 	 * Rule implementation
@@ -56,12 +56,12 @@ public class ASTRuleDescriptor {
 	/**
 	 * Rule Factory
 	 */
-	private AbstractASTRuleFactory ruleFactory;
+	private final AbstractASTRuleFactory ruleFactory;
 
 	/**
 	 * True is the rule cannot be disabled/bypassed. false otherwise
 	 */
-	private boolean mandatory;
+	private final boolean mandatory;
 
 	/**
 	 * Create Rule Descriptor
@@ -71,7 +71,7 @@ public class ASTRuleDescriptor {
 	 * @param ruleFactory
 	 * @param mandatory
 	 */
-	public ASTRuleDescriptor(String description, AbstractASTRuleFactory ruleFactory, boolean mandatory) {
+	public ASTRuleDescriptor(final String description, final AbstractASTRuleFactory ruleFactory, final boolean mandatory) {
 		this.id = UUID.randomUUID().toString();
 		this.description = description != null ? description : "";
 		this.ruleFactory = ruleFactory;
@@ -84,14 +84,14 @@ public class ASTRuleDescriptor {
 	 * @return id
 	 */
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @return description
 	 */
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
 	/**
@@ -99,9 +99,10 @@ public class ASTRuleDescriptor {
 	 */
 	public AbstractASTRule getRule() {
 		if (ASTRulesPreferences.areRulesSingletons()) {
-			return singletonRule;
-		} else
+			return this.singletonRule;
+		} else {
 			return this.createRule();
+		}
 	}
 
 	/**
@@ -117,7 +118,7 @@ public class ASTRuleDescriptor {
 	 * @return repository
 	 */
 	public ASTRulesRepository getRepository() {
-		return repository;
+		return this.repository;
 	}
 
 	/**
@@ -125,7 +126,7 @@ public class ASTRuleDescriptor {
 	 * 
 	 * @param repository
 	 */
-	public void setRuleRepository(ASTRulesRepository repository) {
+	public void setRuleRepository(final ASTRulesRepository repository) {
 		this.repository = repository;
 	}
 
@@ -145,9 +146,10 @@ public class ASTRuleDescriptor {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof ASTRuleDescriptor))
+	public boolean equals(final Object obj) {
+		if (!(obj instanceof ASTRuleDescriptor)) {
 			return false;
+		}
 		return this.id.equals(((ASTRuleDescriptor) obj).id);
 	}
 
@@ -157,7 +159,7 @@ public class ASTRuleDescriptor {
 	 * @return
 	 */
 	public boolean isMandatory() {
-		return mandatory;
+		return this.mandatory;
 	}
 
 	/**

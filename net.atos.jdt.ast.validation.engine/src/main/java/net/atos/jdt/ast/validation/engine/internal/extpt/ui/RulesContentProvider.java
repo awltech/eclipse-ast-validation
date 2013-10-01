@@ -28,13 +28,15 @@ import org.eclipse.jface.viewers.Viewer;
 
 /**
  * Rules Content Provider
+ * 
  * @author mvanbesien
- *
+ * 
  */
 public class RulesContentProvider implements ITreeContentProvider {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
 	 */
 	@Override
@@ -43,47 +45,63 @@ public class RulesContentProvider implements ITreeContentProvider {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface
+	 * .viewers.Viewer, java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.Object)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.
+	 * Object)
 	 */
 	@Override
-	public Object[] getElements(Object inputElement) {
-		return getChildren(inputElement);
+	public Object[] getElements(final Object inputElement) {
+		return this.getChildren(inputElement);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.
+	 * Object)
 	 */
 	@Override
-	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof ASTRulesRepository)
+	public Object[] getChildren(final Object parentElement) {
+		if (parentElement instanceof ASTRulesRepository) {
 			return ((ASTRulesRepository) parentElement).getRules().toArray();
+		}
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object
+	 * )
 	 */
 	@Override
-	public Object getParent(Object element) {
+	public Object getParent(final Object element) {
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.
+	 * Object)
 	 */
 	@Override
-	public boolean hasChildren(Object element) {
+	public boolean hasChildren(final Object element) {
 		return element instanceof ASTRulesRepository;
 	}
 

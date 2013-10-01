@@ -42,12 +42,12 @@ public class ASTExtensionPointRulesFactory extends AbstractASTRuleFactory {
 	/**
 	 * Extension attribute ID
 	 */
-	private String extensionPointKey;
+	private final String extensionPointKey;
 
 	/**
 	 * Extension element
 	 */
-	private IConfigurationElement element;
+	private final IConfigurationElement element;
 
 	/**
 	 * Creates new factory with Extension point information, so we use extension
@@ -57,7 +57,7 @@ public class ASTExtensionPointRulesFactory extends AbstractASTRuleFactory {
 	 * @param element
 	 * @param extensionPointKey
 	 */
-	public ASTExtensionPointRulesFactory(IConfigurationElement element, String extensionPointKey) {
+	public ASTExtensionPointRulesFactory(final IConfigurationElement element, final String extensionPointKey) {
 		this.element = element;
 		this.extensionPointKey = extensionPointKey;
 	}
@@ -70,20 +70,21 @@ public class ASTExtensionPointRulesFactory extends AbstractASTRuleFactory {
 	@Override
 	public AbstractASTRule create() {
 		try {
-			if (element != null || extensionPointKey != null) {
-				Object createdExecutableExtension = this.element.createExecutableExtension(this.extensionPointKey);
-				if (createdExecutableExtension instanceof AbstractASTRule)
+			if ((this.element != null) && (this.extensionPointKey != null)) {
+				final Object createdExecutableExtension = this.element
+						.createExecutableExtension(this.extensionPointKey);
+				if (createdExecutableExtension instanceof AbstractASTRule) {
 					return (AbstractASTRule) createdExecutableExtension;
-				else {
+				} else {
 					Activator
 							.getDefault()
 							.getLog()
-							.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Created element is not a rule ! "
-									+ createdExecutableExtension == null ? null : createdExecutableExtension.getClass()
-									.getName()));
+							.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
+									("Created element is not a rule ! " + createdExecutableExtension) == null ? null
+											: createdExecutableExtension.getClass().getName()));
 				}
 			}
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 		}
 		return null;

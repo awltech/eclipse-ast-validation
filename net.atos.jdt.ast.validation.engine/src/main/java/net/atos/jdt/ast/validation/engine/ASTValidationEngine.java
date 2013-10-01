@@ -53,7 +53,7 @@ public class ASTValidationEngine {
 	/**
 	 * List of Compilation Units to be managed by this process
 	 */
-	private Collection<ICompilationUnit> compilationUnits = new ArrayList<ICompilationUnit>();;
+	private final Collection<ICompilationUnit> compilationUnits = new ArrayList<ICompilationUnit>();;
 
 	/**
 	 * Valid Repositories for this engine
@@ -68,7 +68,7 @@ public class ASTValidationEngine {
 	/**
 	 * Session to send to the executed rules
 	 */
-	private Map<String, Object> session = new HashMap<String, Object>();
+	private final Map<String, Object> session = new HashMap<String, Object>();
 
 	/**
 	 * Replaces the session by the one provided as a parameter.
@@ -76,7 +76,7 @@ public class ASTValidationEngine {
 	 * @param session
 	 * @return
 	 */
-	public ASTValidationEngine withSession(Map<String, Object> session) {
+	public ASTValidationEngine withSession(final Map<String, Object> session) {
 		this.session.clear();
 		this.session.putAll(session);
 		return this;
@@ -88,13 +88,14 @@ public class ASTValidationEngine {
 	 * @param compilationUnits
 	 * @param validRepositories
 	 */
-	public ASTValidationEngine(IASTRulesDataSource dataSource, final Collection<ICompilationUnit> compilationUnits,
-			final String... validRepositories) {
+	public ASTValidationEngine(final IASTRulesDataSource dataSource,
+			final Collection<ICompilationUnit> compilationUnits, final String... validRepositories) {
 		this.compilationUnits.clear();
 		this.compilationUnits.addAll(compilationUnits);
 		this.validRepositories = validRepositories;
-		if (dataSource != null)
+		if (dataSource != null) {
 			this.dataSource = dataSource;
+		}
 	}
 
 	/**
@@ -131,8 +132,9 @@ public class ASTValidationEngine {
 	 */
 	private void execute(final ICompilationUnit compilationUnit, final IProgressMonitor monitor) throws CoreException {
 
-		if (compilationUnit == null || !compilationUnit.exists())
+		if ((compilationUnit == null) || !compilationUnit.exists()) {
 			return;
+		}
 
 		final List<ASTRulesRepository> repositories = this.dataSource.getRepositories(this.validRepositories);
 		// At first remove the previous markers
@@ -152,19 +154,20 @@ public class ASTValidationEngine {
 				final CompilationUnit domCompilationUnit = (CompilationUnit) parser
 						.createAST(new NullProgressMonitor());
 				try {
-					AbstractASTRule rule = ruleDescriptor.getRule();
+					final AbstractASTRule rule = ruleDescriptor.getRule();
 					rule.setSession(this.session);
 					domCompilationUnit.accept(rule);
-					for (ASTValidationProblem problem : rule.getProblems())
+					for (final ASTValidationProblem problem : rule.getProblems()) {
 						problem.toMarker(resource);
-				} catch (Exception e) {
+					}
+				} catch (final Exception e) {
 					Activator
 							.getDefault()
 							.getLog()
 							.log(new Status(
 									IStatus.ERROR,
 									Activator.PLUGIN_ID,
-									"An exception was caught while executing rule <" + ruleDescriptor.getRule() != null ? ruleDescriptor
+									("An exception was caught while executing rule <" + ruleDescriptor.getRule()) != null ? ruleDescriptor
 											.getRule().getClass().getName()
 											: ruleDescriptor.getId() + "> on <" + compilationUnit.getElementName()
 													+ ">", e));

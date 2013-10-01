@@ -39,7 +39,7 @@ public class RulesListRefreshmentListener implements ISelectionChangedListener {
 	/**
 	 * viewer to be refreshed when event is caught
 	 */
-	private CheckboxTreeViewer treeViewer;
+	private final CheckboxTreeViewer treeViewer;
 
 	/**
 	 * Creates new listener
@@ -47,7 +47,7 @@ public class RulesListRefreshmentListener implements ISelectionChangedListener {
 	 * @param treeViewer
 	 *            viewer to be refreshed when event is caught
 	 */
-	public RulesListRefreshmentListener(CheckboxTreeViewer treeViewer) {
+	public RulesListRefreshmentListener(final CheckboxTreeViewer treeViewer) {
 		this.treeViewer = treeViewer;
 	}
 
@@ -59,8 +59,8 @@ public class RulesListRefreshmentListener implements ISelectionChangedListener {
 	 * org.eclipse.jface.viewers.SelectionChangedEvent)
 	 */
 	@Override
-	public void selectionChanged(SelectionChangedEvent event) {
-		ISelection selection = event.getSelection();
+	public void selectionChanged(final SelectionChangedEvent event) {
+		final ISelection selection = event.getSelection();
 		this.treeViewer.setInput(((IStructuredSelection) selection).iterator().next());
 		this.treeViewer.refresh();
 	}

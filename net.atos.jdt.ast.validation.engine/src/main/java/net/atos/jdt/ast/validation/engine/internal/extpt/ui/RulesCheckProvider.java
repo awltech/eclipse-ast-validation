@@ -39,7 +39,7 @@ public class RulesCheckProvider implements ICheckStateProvider {
 	/**
 	 * Map with temp states
 	 */
-	private Map<ASTRuleDescriptor, Boolean> states;
+	private final Map<ASTRuleDescriptor, Boolean> states;
 
 	/**
 	 * Creates instance with temp states map, to be read when initializing
@@ -47,7 +47,7 @@ public class RulesCheckProvider implements ICheckStateProvider {
 	 * 
 	 * @param states
 	 */
-	public RulesCheckProvider(Map<ASTRuleDescriptor, Boolean> states) {
+	public RulesCheckProvider(final Map<ASTRuleDescriptor, Boolean> states) {
 		this.states = states;
 	}
 
@@ -58,13 +58,15 @@ public class RulesCheckProvider implements ICheckStateProvider {
 	 * org.eclipse.jface.viewers.ICheckStateProvider#isChecked(java.lang.Object)
 	 */
 	@Override
-	public boolean isChecked(Object element) {
+	public boolean isChecked(final Object element) {
 		if (element instanceof ASTRuleDescriptor) {
-			ASTRuleDescriptor descriptor = (ASTRuleDescriptor) element;
-			if (descriptor.isMandatory())
+			final ASTRuleDescriptor descriptor = (ASTRuleDescriptor) element;
+			if (descriptor.isMandatory()) {
 				return true;
-			if (states.containsKey(descriptor))
-				return states.get(descriptor);
+			}
+			if (this.states.containsKey(descriptor)) {
+				return this.states.get(descriptor);
+			}
 			return ASTRulesPreferences.isEnabled(descriptor);
 		}
 
@@ -78,9 +80,9 @@ public class RulesCheckProvider implements ICheckStateProvider {
 	 * org.eclipse.jface.viewers.ICheckStateProvider#isGrayed(java.lang.Object)
 	 */
 	@Override
-	public boolean isGrayed(Object element) {
+	public boolean isGrayed(final Object element) {
 		if (element instanceof ASTRuleDescriptor) {
-			ASTRuleDescriptor descriptor = (ASTRuleDescriptor) element;
+			final ASTRuleDescriptor descriptor = (ASTRuleDescriptor) element;
 			return descriptor.isMandatory();
 		}
 		return false;

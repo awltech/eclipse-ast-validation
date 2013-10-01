@@ -54,7 +54,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
-import net.atos.jdt.ast.validation.engine.internal.extpt.ui.RulesPreferencePagesMessages;
 
 /**
  * Preference Page that contains the list of rules, to enable/disable them
@@ -67,7 +66,7 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 	/**
 	 * Map containing temp states
 	 */
-	private Map<ASTRuleDescriptor, Boolean> states = new HashMap<ASTRuleDescriptor, Boolean>();
+	private final Map<ASTRuleDescriptor, Boolean> states = new HashMap<ASTRuleDescriptor, Boolean>();
 
 	/**
 	 * Button temp state
@@ -83,7 +82,7 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	@Override
-	public void init(IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
 		// Does nothing. Preferences Management performed thanks to
 		// ASTRulesPreferences class
 	}
@@ -96,70 +95,69 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 	 * .swt.widgets.Composite)
 	 */
 	@Override
-	protected Control createContents(Composite parent) {
+	protected Control createContents(final Composite parent) {
 
 		// Builds graphical Structure
-		Composite background = new Composite(parent, SWT.NONE);
+		final Composite background = new Composite(parent, SWT.NONE);
 		background.setLayout(new FormLayout());
 
-		Label message = new Label(background, SWT.WRAP);
+		final Label message = new Label(background, SWT.WRAP);
 		message.setText(RulesPreferencePagesMessages.PREFERENCE_LABEL.value());
 		new FormDataBuilder().horizontal().top().height(30).apply(message);
 
-		Button participantButton = new Button(background, SWT.CHECK);
+		final Button participantButton = new Button(background, SWT.CHECK);
 		participantButton.setText(RulesPreferencePagesMessages.ENABLE_CUP.value());
 		participantButton.setToolTipText(RulesPreferencePagesMessages.ENABLE_CUP_TOOLTIP.value());
 		participantButton.setSelection(ASTRulesPreferences.isValidationParticipantEnabled());
 		participantButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				participantButtonEnabled = ((Button) e.widget).getSelection();
+			public void widgetSelected(final SelectionEvent e) {
+				RulesExtensionPointPreferencePage.this.participantButtonEnabled = ((Button) e.widget).getSelection();
 			}
 		});
 		new FormDataBuilder().left().right().top(message, 15).apply(participantButton);
 		//
-		Button rulesSingletonButton = new Button(background, SWT.CHECK);
+		final Button rulesSingletonButton = new Button(background, SWT.CHECK);
 		rulesSingletonButton.setText(RulesPreferencePagesMessages.ENABLE_SINGLETONS.value());
-		rulesSingletonButton
-				.setToolTipText(RulesPreferencePagesMessages.ENABLE_SINGLETONS_TOOLTIP.value());
+		rulesSingletonButton.setToolTipText(RulesPreferencePagesMessages.ENABLE_SINGLETONS_TOOLTIP.value());
 		rulesSingletonButton.setSelection(ASTRulesPreferences.areRulesSingletons());
 		rulesSingletonButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				rulesAreSingletons = ((Button) e.widget).getSelection();
+			public void widgetSelected(final SelectionEvent e) {
+				RulesExtensionPointPreferencePage.this.rulesAreSingletons = ((Button) e.widget).getSelection();
 			}
 		});
 		//
 		new FormDataBuilder().left().right().top(participantButton).apply(rulesSingletonButton);
 
-		Label comboLabel = new Label(background, SWT.NONE);
+		final Label comboLabel = new Label(background, SWT.NONE);
 		comboLabel.setText(RulesPreferencePagesMessages.REPOSITORY_LABEL.value());
 		new FormDataBuilder().left().top(rulesSingletonButton, 17).width(100).apply(comboLabel);
 
-		Combo combo = new Combo(background, SWT.READ_ONLY);
+		final Combo combo = new Combo(background, SWT.READ_ONLY);
 		new FormDataBuilder().left(comboLabel).top(rulesSingletonButton, 15).right().apply(combo);
 
-		ComboViewer comboViewer = new ComboViewer(combo);
+		final ComboViewer comboViewer = new ComboViewer(combo);
 		comboViewer.setContentProvider(new RulesRepositoriesContentProvider());
 		comboViewer.setLabelProvider(new RulesRepositoriesLabelProvider());
 
-		Link link = new Link(background, SWT.NONE);
+		final Link link = new Link(background, SWT.NONE);
 		link.setText(RulesPreferencePagesMessages.LINK_TO_QUICKSTART.value());
 		link.addSelectionListener(new OpenLinkActionSelectionAdapter());
 		new FormDataBuilder().bottom().left().right().apply(link);
 
-		Group group = new Group(background, SWT.NONE);
+		final Group group = new Group(background, SWT.NONE);
 		group.setLayout(new FormLayout());
 		new FormDataBuilder().horizontal().top(combo).bottom(link).apply(group);
 		group.setText(RulesPreferencePagesMessages.GROUP_LABEL.value());
 
-		Tree tree = new Tree(group, SWT.CHECK | SWT.BORDER);
+		final Tree tree = new Tree(group, SWT.CHECK | SWT.BORDER);
 		new FormDataBuilder().fill().apply(tree);
-		CheckboxTreeViewer treeViewer = new CheckboxTreeViewer(tree);
+		final CheckboxTreeViewer treeViewer = new CheckboxTreeViewer(tree);
 		treeViewer.setLabelProvider(new RulesLabelProvider());
 		treeViewer.setContentProvider(new RulesContentProvider());
-		treeViewer.setCheckStateProvider(new RulesCheckProvider(states));
-		treeViewer.addCheckStateListener(new RulesCheckListener(states));
+		treeViewer.setCheckStateProvider(new RulesCheckProvider(this.states));
+		treeViewer.addCheckStateListener(new RulesCheckListener(this.states));
 
 		// Add inputs
 		comboViewer.addSelectionChangedListener(new RulesListRefreshmentListener(treeViewer));
@@ -175,13 +173,15 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 	 */
 	@Override
 	public boolean performOk() {
-		for (ASTRuleDescriptor descriptor : this.states.keySet())
+		for (final ASTRuleDescriptor descriptor : this.states.keySet()) {
 			ASTRulesPreferences.setEnabled(descriptor, this.states.get(descriptor));
+		}
 
-		if (this.participantButtonEnabled)
+		if (this.participantButtonEnabled) {
 			ASTRulesPreferences.enableValidationParticipant();
-		else
+		} else {
 			ASTRulesPreferences.disableValidationParticipant();
+		}
 
 		ASTRulesPreferences.setUseRulesAsSingletons(this.rulesAreSingletons);
 
@@ -191,17 +191,17 @@ public class RulesExtensionPointPreferencePage extends PreferencePage implements
 	private static final class OpenLinkActionSelectionAdapter extends SelectionAdapter {
 
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			IWorkbenchBrowserSupport browserSupport = PlatformUI.getWorkbench().getBrowserSupport();
+		public void widgetSelected(final SelectionEvent e) {
+			final IWorkbenchBrowserSupport browserSupport = PlatformUI.getWorkbench().getBrowserSupport();
 			IWebBrowser browser;
 			try {
 				browser = browserSupport.createBrowser(IWorkbenchBrowserSupport.LOCATION_BAR
 						| IWorkbenchBrowserSupport.NAVIGATION_BAR, null, "Web Browser", "Web Browser");
 				browser.openURL(new URL(e.text));
-			} catch (PartInitException e1) {
+			} catch (final PartInitException e1) {
 				Activator.getDefault().getLog()
 						.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e1.getMessage(), e1));
-			} catch (MalformedURLException e1) {
+			} catch (final MalformedURLException e1) {
 				Activator.getDefault().getLog()
 						.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e1.getMessage(), e1));
 			}

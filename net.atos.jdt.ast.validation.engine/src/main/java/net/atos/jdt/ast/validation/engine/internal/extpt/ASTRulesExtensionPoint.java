@@ -97,7 +97,7 @@ public class ASTRulesExtensionPoint implements IASTRulesDataSource {
 				if (ASTRulesExtensionPoint.REPOSITORY.equals(configurationElement.getName())) {
 					final String repositoryID = configurationElement.getAttribute(ASTRulesExtensionPoint.ID);
 					String repositoryMarkerId = configurationElement.getAttribute(ASTRulesExtensionPoint.MARKER_ID);
-					if (repositoryMarkerId == null || repositoryMarkerId.trim().length() == 0) {
+					if ((repositoryMarkerId == null) || (repositoryMarkerId.trim().length() == 0)) {
 						repositoryMarkerId = ASTRulesExtensionPoint.DEFAULT_MARKER;
 					}
 					final ASTRulesRepository repository = new ASTRulesRepository(repositoryID, repositoryMarkerId);
@@ -119,8 +119,9 @@ public class ASTRulesExtensionPoint implements IASTRulesDataSource {
 					for (final IConfigurationElement contextElement : configurationElement
 							.getChildren(ASTRulesExtensionPoint.RULE)) {
 						try {
-							final String description = contextElement.getAttribute(DESCRIPTION);
-							final boolean mandatory = Boolean.valueOf(contextElement.getAttribute(MANDATORY));
+							final String description = contextElement.getAttribute(ASTRulesExtensionPoint.DESCRIPTION);
+							final boolean mandatory = Boolean.valueOf(contextElement
+									.getAttribute(ASTRulesExtensionPoint.MANDATORY));
 							final ASTExtensionPointRulesFactory factory = new ASTExtensionPointRulesFactory(
 									contextElement, ASTRulesExtensionPoint.IMPLEMENTATION);
 							repository.registerRule(new ASTRuleDescriptor(description, factory, mandatory));
@@ -156,7 +157,7 @@ public class ASTRulesExtensionPoint implements IASTRulesDataSource {
 			return true;
 		}
 		for (final String repoId : repositoriesId) {
-			if (repoId != null && repoId.equals(repositoryId)) {
+			if ((repoId != null) && repoId.equals(repositoryId)) {
 				return true;
 			}
 		}
@@ -174,7 +175,7 @@ public class ASTRulesExtensionPoint implements IASTRulesDataSource {
 	public List<ASTRulesRepository> getRepositories(final String... repositories) {
 		final List<ASTRulesRepository> repositoriesList = new ArrayList<ASTRulesRepository>();
 		for (final ASTRulesRepository repository : this.repositories) {
-			if (repositories.length == 0 || this.isValidRepositoryId(repository.getId(), repositories)) {
+			if ((repositories.length == 0) || this.isValidRepositoryId(repository.getId(), repositories)) {
 				repositoriesList.add(repository);
 			}
 		}

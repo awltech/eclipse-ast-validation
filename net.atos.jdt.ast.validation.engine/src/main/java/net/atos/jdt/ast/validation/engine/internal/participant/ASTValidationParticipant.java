@@ -64,7 +64,7 @@ public class ASTValidationParticipant extends CompilationParticipant {
 	 * .jdt.core.IJavaProject)
 	 */
 	@Override
-	public boolean isActive(IJavaProject project) {
+	public boolean isActive(final IJavaProject project) {
 		return ASTRulesPreferences.isValidationParticipantEnabled();
 	}
 
@@ -88,42 +88,46 @@ public class ASTValidationParticipant extends CompilationParticipant {
 	 * .jdt.core.compiler.ReconcileContext)
 	 */
 	@Override
-	public void reconcile(ReconcileContext context) {
+	public void reconcile(final ReconcileContext context) {
 
 		// We check if we can execute...
-		if (!ASTRulesPreferences.isValidationParticipantEnabled())
+		if (!ASTRulesPreferences.isValidationParticipantEnabled()) {
 			return;
+		}
 
 		// At first, let's do some validation.
 		CompilationUnit domCU = null;
 		try {
 			domCU = context.getAST4();
-		} catch (JavaModelException e) {
+		} catch (final JavaModelException e) {
 			Activator.logException(e);
 			return;
 		}
-		if (domCU == null)
+		if (domCU == null) {
 			return;
+		}
 
-		IJavaElement javaElement = domCU.getJavaElement();
-		if (!(javaElement instanceof ICompilationUnit))
+		final IJavaElement javaElement = domCU.getJavaElement();
+		if (!(javaElement instanceof ICompilationUnit)) {
 			return;
+		}
 
-		ICompilationUnit iCompilationUnit = (ICompilationUnit) javaElement;
+		final ICompilationUnit iCompilationUnit = (ICompilationUnit) javaElement;
 		// Now we perform the process
 
-		for (ASTRulesRepository repository : this.dataSource.getRepositories()) {
+		for (final ASTRulesRepository repository : this.dataSource.getRepositories()) {
 			try {
 				iCompilationUnit.getResource().deleteMarkers(repository.getMarkerId(), true, IResource.DEPTH_ZERO);
-			} catch (CoreException e) {
+			} catch (final CoreException e) {
 				Activator.logException(e);
 			}
 			if (repository.isEnabled(iCompilationUnit)) {
-				for (ASTRuleDescriptor ruleDescriptor : repository.getRules(iCompilationUnit)) {
-					AbstractASTRule rule = ruleDescriptor.getRule();
+				for (final ASTRuleDescriptor ruleDescriptor : repository.getRules(iCompilationUnit)) {
+					final AbstractASTRule rule = ruleDescriptor.getRule();
 					domCU.accept(rule);
-					for (ASTValidationProblem problem : rule.getProblems())
+					for (final ASTValidationProblem problem : rule.getProblems()) {
 						problem.toMarker(javaElement.getResource());
+					}
 				}
 			}
 		}

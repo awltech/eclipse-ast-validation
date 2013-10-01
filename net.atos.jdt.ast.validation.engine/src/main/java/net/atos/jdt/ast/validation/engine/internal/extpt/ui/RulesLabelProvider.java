@@ -29,8 +29,9 @@ import org.eclipse.swt.graphics.Image;
 
 /**
  * Rules Label Provider
+ * 
  * @author mvanbesien
- *
+ * 
  */
 public class RulesLabelProvider extends LabelProvider {
 
@@ -41,23 +42,24 @@ public class RulesLabelProvider extends LabelProvider {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
 	 */
 	@Override
-	public Image getImage(Object element) {
-		return Activator.getDefault().getImage(ICON_RULE_GIF);
+	public Image getImage(final Object element) {
+		return Activator.getDefault().getImage(RulesLabelProvider.ICON_RULE_GIF);
 	}
-	
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
 	 */
 	@Override
-	public String getText(Object element) {
+	public String getText(final Object element) {
 
 		if (element instanceof ASTRuleDescriptor) {
-			ASTRuleDescriptor descriptor = (ASTRuleDescriptor) element;
+			final ASTRuleDescriptor descriptor = (ASTRuleDescriptor) element;
 			return descriptor.getDescription();
 		}
 		return "";
