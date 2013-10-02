@@ -7,4 +7,5 @@
   	<version>1.1.0-SNAPSHOT</version>
   </parent>
   <packaging>eclipse-feature</packaging>
+  <name>Eclipse AST-based Validation Framework SDK Feature</name>
 </project>

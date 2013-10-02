@@ -4,7 +4,7 @@
 	<groupId>net.atos.jdt.ast.validation</groupId>
 	<artifactId>net.atos.jdt.ast.validation.parent</artifactId>
 	<version>1.1.0-SNAPSHOT</version>
-	<name>Parent POM of the Eclipse's AST Validation Engine</name>
+	<name>Eclipse AST-based Validation Framework</name>
 	<developers>
 		<developer>
 			<id>mvanbesien</id>
@@ -171,4 +171,6 @@
 			</plugin>
 		</plugins>
 	</build>
+	<url>https://github.com/awltech/eclipse-ast-validation</url>
+	<description>This framework is a light validation framework, based on Eclipse markers and the AST language, to allow extensible and configurable validation rules implementation upon AST Visitors. </description>
 </project>
