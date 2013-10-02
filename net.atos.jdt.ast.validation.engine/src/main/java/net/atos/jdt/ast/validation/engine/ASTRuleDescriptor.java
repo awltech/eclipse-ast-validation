@@ -101,7 +101,9 @@ public class ASTRuleDescriptor {
 		if (ASTRulesPreferences.areRulesSingletons()) {
 			return this.singletonRule;
 		} else {
-			return this.createRule();
+			AbstractASTRule createdRule = this.createRule();
+			createdRule.setRuleDescriptor(this);
+			return createdRule;
 		}
 	}
 
