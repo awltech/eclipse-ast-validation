@@ -2,7 +2,7 @@
 <feature
       id="net.atos.jdt.ast.validation.feature"
       label="AST Rules Validation Lite Engine"
-      version="1.1.0.qualifier"
+      version="1.1.1.qualifier"
       provider-name="Worldline.com">
 
    <description url="http://www.example.com/description">
