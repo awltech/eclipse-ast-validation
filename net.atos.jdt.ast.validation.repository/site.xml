@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/net.atos.jdt.ast.validation.feature_1.1.0.qualifier.jar" id="net.atos.jdt.ast.validation.feature" version="1.1.0.qualifier">
+   <feature url="features/net.atos.jdt.ast.validation.feature_1.1.1.qualifier.jar" id="net.atos.jdt.ast.validation.feature" version="1.1.1.qualifier">
       <category name="AST Rules Validation Lite Engine"/>
    </feature>
    <category-def name="AST Rules Validation Lite Engine" label="AST Rules Validation Lite Engine"/>

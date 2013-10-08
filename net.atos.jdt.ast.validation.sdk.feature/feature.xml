@@ -2,7 +2,7 @@
 <feature
       id="net.atos.jdt.ast.validation.sdk.feature"
       label="AST Rules Validation Engine SDK"
-      version="1.1.0.qualifier"
+      version="1.1.1.qualifier"
       provider-name="Worldline.com">
 
    <description url="http://www.example.com/description">
@@ -18,7 +18,7 @@
    </license>
 
    <requires>
-      <import feature="net.atos.jdt.ast.validation.feature" version="1.1.0.qualifier"/>
+      <import feature="net.atos.jdt.ast.validation.feature" version="1.1.1.qualifier"/>
    </requires>
 
    <plugin
