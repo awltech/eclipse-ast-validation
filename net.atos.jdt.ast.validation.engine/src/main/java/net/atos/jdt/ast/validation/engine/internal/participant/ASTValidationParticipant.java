@@ -130,25 +130,28 @@ public class ASTValidationParticipant extends CompilationParticipant {
 
 		// Only if enabled, we start checking the source...
 		if (ASTRulesPreferences.isValidationParticipantEnabled()) {
-			
-			// If enabled, we collect all the compilation units raised by the context
+
+			// If enabled, we collect all the compilation units raised by the
+			// context
 			Collection<ICompilationUnit> compilationUnits = new ArrayList<ICompilationUnit>();
 			for (BuildContext file : files) {
 				IFile iFile = file.getFile();
-				IJavaElement javaElement = JavaCore.create(iFile);
-				if (javaElement instanceof ICompilationUnit) {
-					compilationUnits.add((ICompilationUnit) javaElement);
+				if (iFile != null && iFile.exists()) {
+					IJavaElement javaElement = JavaCore.create(iFile);
+					if (javaElement instanceof ICompilationUnit) {
+						compilationUnits.add((ICompilationUnit) javaElement);
+					}
 				}
 			}
 			try {
-				
+
 				// For all collected units, we validate them.
 				new ASTValidationEngine(compilationUnits).execute(new NullProgressMonitor());
 			} catch (CoreException e) {
 				Activator.logException(e);
 			}
 		}
-		
+
 		// Resume the process...
 		super.buildStarting(files, isBatch);
 	}
