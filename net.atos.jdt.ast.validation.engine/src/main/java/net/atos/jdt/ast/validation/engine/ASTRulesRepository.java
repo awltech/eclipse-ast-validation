@@ -43,6 +43,11 @@ public class ASTRulesRepository {
 	private final String id;
 
 	/**
+	 * Rule Repository name (used in preferences display)
+	 */
+	private String name;
+	
+	/**
 	 * Context instance. In case user wants more complicated implementation on
 	 * specific project.
 	 */
@@ -92,6 +97,23 @@ public class ASTRulesRepository {
 		return this.id;
 	}
 
+	/**
+	 * Repository's name
+	 * 
+	 * @return
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * Repository's name
+	 * 
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 	/**
 	 * Sets context to this repository.
 	 * 

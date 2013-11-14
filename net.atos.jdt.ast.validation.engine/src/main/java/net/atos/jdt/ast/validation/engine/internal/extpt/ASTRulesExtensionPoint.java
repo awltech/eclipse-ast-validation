@@ -60,6 +60,7 @@ public class ASTRulesExtensionPoint implements IASTRulesDataSource {
 	private static final String MARKER_ID = "markerId";
 	private static final String ID = "id";
 	private static final String REPOSITORY = "repository";
+	private static final String REPOSITORY_NAME = "name";
 	private static final String EXTPT_NAME = "ASTValidationRules";
 
 	// End of such constants.
@@ -100,7 +101,13 @@ public class ASTRulesExtensionPoint implements IASTRulesDataSource {
 					if ((repositoryMarkerId == null) || (repositoryMarkerId.trim().length() == 0)) {
 						repositoryMarkerId = ASTRulesExtensionPoint.DEFAULT_MARKER;
 					}
+					
+					String repositoryName = configurationElement.getAttribute(ASTRulesExtensionPoint.REPOSITORY_NAME);
+					if (repositoryName == null || repositoryName.length() == 0)
+						repositoryName = repositoryID;
 					final ASTRulesRepository repository = new ASTRulesRepository(repositoryID, repositoryMarkerId);
+					repository.setName(repositoryName);
+					
 					for (final IConfigurationElement contextElement : configurationElement
 							.getChildren(ASTRulesExtensionPoint.CONTEXT)) {
 						try {

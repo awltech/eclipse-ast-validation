@@ -58,7 +58,10 @@ public class RulesRepositoriesLabelProvider extends LabelProvider {
 	@Override
 	public String getText(final Object element) {
 		if (element instanceof ASTRulesRepository) {
-			return ((ASTRulesRepository) element).getId();
+			ASTRulesRepository repository = (ASTRulesRepository) element;
+			String repositoryName = repository.getName();
+			String repositoryId = repository.getId();
+			return repositoryName != null && repositoryName.length() > 0 ? repositoryName : repositoryId;
 		}
 		return "";
 	}
