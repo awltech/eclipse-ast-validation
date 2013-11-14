@@ -21,21 +21,29 @@
  */
 package net.atos.jdt.ast.validation.engine.internal.participant;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.atos.jdt.ast.validation.engine.ASTRuleDescriptor;
 import net.atos.jdt.ast.validation.engine.ASTRulesPreferences;
 import net.atos.jdt.ast.validation.engine.ASTRulesRepository;
+import net.atos.jdt.ast.validation.engine.ASTValidationEngine;
 import net.atos.jdt.ast.validation.engine.ASTValidationProblem;
 import net.atos.jdt.ast.validation.engine.IASTRulesDataSource;
 import net.atos.jdt.ast.validation.engine.internal.Activator;
 import net.atos.jdt.ast.validation.engine.internal.extpt.ASTRulesExtensionPoint;
 import net.atos.jdt.ast.validation.engine.rules.AbstractASTRule;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.compiler.BuildContext;
 import org.eclipse.jdt.core.compiler.CompilationParticipant;
 import org.eclipse.jdt.core.compiler.ReconcileContext;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -112,8 +120,40 @@ public class ASTValidationParticipant extends CompilationParticipant {
 			return;
 		}
 
-		final ICompilationUnit iCompilationUnit = (ICompilationUnit) javaElement;
 		// Now we perform the process
+		processCompilationUnit((ICompilationUnit) javaElement, domCU);
+
+	}
+
+	@Override
+	public void buildStarting(BuildContext[] files, boolean isBatch) {
+
+		// Only if enabled, we start checking the source...
+		if (ASTRulesPreferences.isValidationParticipantEnabled()) {
+			
+			// If enabled, we collect all the compilation units raised by the context
+			Collection<ICompilationUnit> compilationUnits = new ArrayList<ICompilationUnit>();
+			for (BuildContext file : files) {
+				IFile iFile = file.getFile();
+				IJavaElement javaElement = JavaCore.create(iFile);
+				if (javaElement instanceof ICompilationUnit) {
+					compilationUnits.add((ICompilationUnit) javaElement);
+				}
+			}
+			try {
+				
+				// For all collected units, we validate them.
+				new ASTValidationEngine(compilationUnits).execute(new NullProgressMonitor());
+			} catch (CoreException e) {
+				Activator.logException(e);
+			}
+		}
+		
+		// Resume the process...
+		super.buildStarting(files, isBatch);
+	}
+
+	private void processCompilationUnit(ICompilationUnit iCompilationUnit, CompilationUnit domCU) {
 
 		for (final ASTRulesRepository repository : this.dataSource.getRepositories()) {
 			try {
@@ -126,7 +166,7 @@ public class ASTValidationParticipant extends CompilationParticipant {
 					final AbstractASTRule rule = ruleDescriptor.getRule();
 					domCU.accept(rule);
 					for (final ASTValidationProblem problem : rule.getProblems()) {
-						problem.toMarker(javaElement.getResource());
+						problem.toMarker(iCompilationUnit.getResource());
 					}
 				}
 			}
