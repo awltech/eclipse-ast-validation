@@ -31,6 +31,12 @@ import net.atos.jdt.ast.validation.engine.internal.Activator;
  */
 public class ASTRulesPreferences {
 
+	/*
+	 * Private constructor
+	 */
+	private ASTRulesPreferences() {
+	}
+	
 	/**
 	 * Key for participant enablement/disablement
 	 */

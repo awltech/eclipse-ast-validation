@@ -78,7 +78,7 @@ public class RulesContentProvider implements ITreeContentProvider {
 		if (parentElement instanceof ASTRulesRepository) {
 			return ((ASTRulesRepository) parentElement).getRules().toArray();
 		}
-		return null;
+		return new Object[0];
 	}
 
 	/*
