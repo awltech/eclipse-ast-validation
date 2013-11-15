@@ -150,11 +150,11 @@ public class ASTValidationParticipant extends CompilationParticipant {
 
 			// If enabled, we collect all the compilation units raised by the
 			// context
-			Collection<ICompilationUnit> compilationUnits = new ArrayList<ICompilationUnit>();
-			for (BuildContext file : files) {
-				IFile iFile = file.getFile();
+			final Collection<ICompilationUnit> compilationUnits = new ArrayList<ICompilationUnit>();
+			for (final BuildContext file : files) {
+				final IFile iFile = file.getFile();
 				if (iFile != null && iFile.exists()) {
-					IJavaElement javaElement = JavaCore.create(iFile);
+					final IJavaElement javaElement = JavaCore.create(iFile);
 					if (javaElement instanceof ICompilationUnit) {
 						compilationUnits.add((ICompilationUnit) javaElement);
 					}
