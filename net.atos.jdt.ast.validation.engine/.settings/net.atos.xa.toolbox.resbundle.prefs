@@ -1,4 +1,4 @@
-LastLiteralPrefix=ENABLE_SINGLETONS_TOOLTIP
-ResourceBundleName=RulesPreferencePagesMessages
-ResourceBundlePackage=net.atos.jdt.ast.validation.engine.internal.extpt.ui
+LastLiteralPrefix=EXCEPTION_DURING_RULEEXEC
+ResourceBundleName=ValidationEngineMessages
+ResourceBundlePackage=net.atos.jdt.ast.validation.engine.internal
 eclipse.preferences.version=1

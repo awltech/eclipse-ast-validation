@@ -161,16 +161,17 @@ public class ASTValidationEngine {
 						problem.toMarker(resource);
 					}
 				} catch (final Exception e) {
+					String ruleId = ruleDescriptor.getRule() != null ? ruleDescriptor
+							.getRule().getClass().getName()
+							: ruleDescriptor.getId();
 					Activator
 							.getDefault()
 							.getLog()
 							.log(new Status(
 									IStatus.ERROR,
 									Activator.PLUGIN_ID,
-									("An exception was caught while executing rule <" + ruleDescriptor.getRule()) != null ? ruleDescriptor
-											.getRule().getClass().getName()
-											: ruleDescriptor.getId() + "> on <" + compilationUnit.getElementName()
-													+ ">", e));
+									ValidationEngineMessages.EXCEPTION_DURING_RULEEXEC.value(ruleId,
+											compilationUnit.getElementName()), e));
 					e.printStackTrace();
 				}
 			}

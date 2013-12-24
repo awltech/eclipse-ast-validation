@@ -27,11 +27,12 @@ import java.util.ResourceBundle;
 /**
  * Class containing messages for AST Validation runtime
  * 
+ * @category
  * @author mvanbesien
  * @since 1.0
  */
 public enum ValidationEngineMessages {
-	RETRIEVING_CU, VALIDATING_SOURCE, VALIDATING_CU, RULE_LOADING_EXCEPTION, CONTEXT_LOADING_EXCEPTION, EXECUTION_EXECPTION;
+	RETRIEVING_CU, VALIDATING_SOURCE, VALIDATING_CU, RULE_LOADING_EXCEPTION, CONTEXT_LOADING_EXCEPTION, EXECUTION_EXECPTION, EXCEPTION_DURING_RULE_EXECUTION, EXCEPTION_DURING_RULEEXEC;
 
 	/*
 	 * ResourceBundle instance
