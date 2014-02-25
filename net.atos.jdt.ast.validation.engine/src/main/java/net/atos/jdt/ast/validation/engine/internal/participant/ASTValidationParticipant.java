@@ -123,7 +123,7 @@ public class ASTValidationParticipant extends CompilationParticipant {
 		// Now we perform the process
 		ICompilationUnit iCompilationUnit = (ICompilationUnit) javaElement;
 
-		if (iCompilationUnit.getResource().exists()) {
+		if (iCompilationUnit.getResource() != null && iCompilationUnit.getResource().exists()) {
 			for (final ASTRulesRepository repository : this.dataSource.getRepositories()) {
 				try {
 					iCompilationUnit.getResource().deleteMarkers(repository.getMarkerId(), true, IResource.DEPTH_ZERO);
