@@ -123,23 +123,24 @@ public class ASTValidationParticipant extends CompilationParticipant {
 		// Now we perform the process
 		ICompilationUnit iCompilationUnit = (ICompilationUnit) javaElement;
 
-		for (final ASTRulesRepository repository : this.dataSource.getRepositories()) {
-			try {
-				iCompilationUnit.getResource().deleteMarkers(repository.getMarkerId(), true, IResource.DEPTH_ZERO);
-			} catch (final CoreException e) {
-				Activator.logException(e);
-			}
-			if (repository.isEnabled(iCompilationUnit)) {
-				for (final ASTRuleDescriptor ruleDescriptor : repository.getRules(iCompilationUnit)) {
-					final AbstractASTRule rule = ruleDescriptor.getRule();
-					domCU.accept(rule);
-					for (final ASTValidationProblem problem : rule.getProblems()) {
-						problem.toMarker(iCompilationUnit.getResource());
+		if (iCompilationUnit.getResource().exists()) {
+			for (final ASTRulesRepository repository : this.dataSource.getRepositories()) {
+				try {
+					iCompilationUnit.getResource().deleteMarkers(repository.getMarkerId(), true, IResource.DEPTH_ZERO);
+				} catch (final CoreException e) {
+					Activator.logException(e);
+				}
+				if (repository.isEnabled(iCompilationUnit)) {
+					for (final ASTRuleDescriptor ruleDescriptor : repository.getRules(iCompilationUnit)) {
+						final AbstractASTRule rule = ruleDescriptor.getRule();
+						domCU.accept(rule);
+						for (final ASTValidationProblem problem : rule.getProblems()) {
+							problem.toMarker(iCompilationUnit.getResource());
+						}
 					}
 				}
 			}
 		}
-
 	}
 
 	@Override
