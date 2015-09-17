@@ -27,7 +27,7 @@
 		<platform-tag>e43x</platform-tag>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<release-type>SNAPSHOT</release-type>
-		<format>yyyyMMddHHmm'-${platform-version-name}-${release-type}'</format>
+		<format>yyyyMMddHHmm'-${release-type}'</format>
 	</properties>
 	<modules>
 		<module>net.atos.jdt.ast.validation.engine</module>
