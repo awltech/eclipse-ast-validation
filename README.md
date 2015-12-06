@@ -12,10 +12,15 @@ Sources
 
 Fork on github: https://github.com/awltech/eclipse-ast-validation
 
+Binaries
+--------
+
+Download the latest snapshot binaries at http://eclipse.worldline.com/nightly/all
+
 Contact
 -------
 
-mailing-list: Maxence Vanbésien (mvaawl@gmail.com)
+mailing-list: Maxence VanbÃ©sien (mvaawl@gmail.com)
 
 Licence
 -------
